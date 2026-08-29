@@ -52,8 +52,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/extenship/easyparser-mcp.git"
+    "url": "git+https://github.com/easyparser-com/mcp-easyparser.git"
   },
   "homepage": "https://easyparser.com",
-  "bugs": "https://github.com/extenship/easyparser-mcp/issues"
+  "bugs": "https://github.com/easyparser-com/mcp-easyparser/issues"
 }

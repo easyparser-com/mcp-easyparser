@@ -5,7 +5,7 @@
   "description": "Real-time, structured Amazon data for AI agents across 21 marketplaces: product details, seller offers, search results, 12-month sales history, Best Sellers Rank, package dimensions, seller profiles, catalogs, and feedback. 10 operations, credit-transparent, read-only.",
   "version": "1.0.0",
   "repository": {
-    "url": "https://github.com/extenship/easyparser-mcp",
+    "url": "https://github.com/easyparser-com/mcp-easyparser",
     "source": "github"
   },
   "websiteUrl": "https://easyparser.com",
