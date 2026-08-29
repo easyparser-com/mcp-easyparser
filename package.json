@@ -1,0 +1,59 @@
+{
+  "name": "easyparser-mcp",
+  "version": "1.0.0",
+  "description": "Official MCP server for Easyparser — real-time, structured Amazon data (product details, offers, search, sales history, seller intelligence) for AI agents across 21 marketplaces.",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "easyparser-mcp": "dist/index.js",
+    "easyparser-mcp-http": "dist/http.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build",
+    
+    "start": "node dist/index.js",
+    "start:http": "node dist/http.js",
+    "dev": "tsx src/index.ts",
+    "dev:http": "tsx src/http.ts",
+    "test": "vitest run",
+    "test:live": "LIVE_TESTS=true vitest run tests/live.test.ts",
+    "inspect": "npm run build && npx @modelcontextprotocol/inspector node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.8"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "amazon",
+    "easyparser",
+    "ecommerce",
+    "scraping",
+    "product-data",
+    "seller-data",
+    "ai-agents"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/extenship/easyparser-mcp.git"
+  },
+  "homepage": "https://easyparser.com",
+  "bugs": "https://github.com/extenship/easyparser-mcp/issues"
+}

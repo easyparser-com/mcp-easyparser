@@ -1,0 +1,42 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+  "name": "com.easyparser/easyparser",
+  "title": "Easyparser — Amazon Product & Seller Data",
+  "description": "Real-time, structured Amazon data for AI agents across 21 marketplaces: product details, seller offers, search results, 12-month sales history, Best Sellers Rank, package dimensions, seller profiles, catalogs, and feedback. 10 operations, credit-transparent, read-only.",
+  "version": "1.0.0",
+  "repository": {
+    "url": "https://github.com/extenship/easyparser-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://easyparser.com",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "easyparser-mcp",
+      "version": "1.0.0",
+      "transport": { "type": "stdio" },
+      "environmentVariables": [
+        {
+          "name": "EASYPARSER_API_KEY",
+          "description": "Your Easyparser API key. Get a free key at https://app.easyparser.com/signup",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.easyparser.com/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Bearer <your Easyparser API key>. Get a free key at https://app.easyparser.com/signup",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
