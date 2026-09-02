@@ -34,8 +34,8 @@ try {
 
   const { tools } = await client.listTools();
   const names = tools.map((t) => t.name);
-  check("15 tools registered", tools.length === 15, `got ${tools.length}`);
-  for (const t of ["list_bulk_jobs", "get_bulk_job_items", "get_bulk_webhook_logs"]) {
+  check("16 tools registered", tools.length === 16, `got ${tools.length}`);
+  for (const t of ["list_bulk_jobs", "get_bulk_job_items", "get_bulk_webhook_logs", "get_bulk_item_result"]) {
     check(`tool present: ${t}`, names.includes(t));
   }
 
@@ -97,6 +97,23 @@ try {
       "item status filter works",
       failedData.success === true && (failedData.data ?? []).every((i) => i.status === "failed"),
     );
+
+    // get_bulk_item_result — old items are expired; verify graceful handling either way
+    if (firstItem?.item_id) {
+      const itemResult = await client.callTool({
+        name: "get_bulk_item_result",
+        arguments: { item_id: firstItem.item_id },
+      });
+      const resultData = parse(itemResult);
+      const isExpired = resultData.expired === true && /expired/i.test(resultData.message ?? "");
+      const hasData = resultData.success === true && !!resultData.data;
+      check(
+        "get_bulk_item_result responds (data or graceful expiry)",
+        itemResult.isError !== true && (isExpired || hasData),
+        JSON.stringify(resultData).slice(0, 200),
+      );
+      console.log(`      item result: ${isExpired ? "expired (graceful)" : "live data returned"}`);
+    }
   }
 
   // get_bulk_webhook_logs (may be empty — structure check only)

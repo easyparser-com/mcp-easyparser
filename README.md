@@ -31,6 +31,7 @@ Product details, seller offers, search results, 12-month sales history, Best Sel
 | `list_bulk_jobs` | Your bulk extraction jobs with progress — including jobs started from the [web app](https://app.easyparser.com/bulk-requests) | free |
 | `get_bulk_job_items` | Per-item outcomes inside a bulk job (debug failed/invalid items) | free |
 | `get_bulk_webhook_logs` | Webhook delivery logs for bulk job completions | free |
+| `get_bulk_item_result` | The parsed data a bulk item produced (results expire after a retention period) | free |
 
 ## Get your API key
 

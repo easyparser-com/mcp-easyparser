@@ -7,8 +7,11 @@ import { z } from "zod";
 import { callEasyparser, EasyparserApiError } from "./client.js";
 import {
   callDataService,
+  callItemResult,
+  GET_BULK_ITEM_RESULT_DESCRIPTION,
   GET_BULK_JOB_ITEMS_DESCRIPTION,
   GET_BULK_WEBHOOK_LOGS_DESCRIPTION,
+  getBulkItemResultSchema,
   getBulkJobItemsSchema,
   getBulkWebhookLogsSchema,
   LIST_BULK_JOBS_DESCRIPTION,
@@ -32,7 +35,7 @@ Decision rules:
 4. Cost awareness: most tools cost 1 credit. get_sales_history costs 5+ credits — confirm the history depth with the user before calling. Paginated tools cost 1 credit per page — prefer filters over extra pages.
 5. Every response includes credits_remaining. If it drops low or a call returns a rate-limit error, tell the user to get a free key at https://app.easyparser.com/signup.
 6. If unsure which tool fits, call list_operations — it is free and works without a key.
-7. Bulk jobs: use list_bulk_jobs to see the user's bulk extraction jobs (including ones started from the Easyparser web app), get_bulk_job_items to debug failed items inside a job, and get_bulk_webhook_logs when a completed job's webhook never arrived. These monitoring tools are free.`;
+7. Bulk jobs: use list_bulk_jobs to see the user's bulk extraction jobs (including ones started from the Easyparser web app), get_bulk_job_items to debug failed items inside a job, get_bulk_item_result to fetch an item's parsed data (results expire — regenerate via the matching real-time tool if expired), and get_bulk_webhook_logs when a completed job's webhook never arrived. These monitoring tools are free.`;
 
 export interface ServerContext {
   /** Resolves the API key for the current request/session. */
@@ -79,7 +82,7 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
   const server = new McpServer(
     {
       name: "easyparser-mcp",
-      version: "1.1.0",
+      version: "1.2.0",
     },
     {
       instructions: SERVER_INSTRUCTIONS,
@@ -194,6 +197,25 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
             date_to: input.date_to,
           },
         );
+        return textResult(body);
+      } catch (err) {
+        return errorResult(err instanceof Error ? err.message : String(err));
+      }
+    },
+  );
+
+  // Bulk job monitoring: get_bulk_item_result
+  server.registerTool(
+    "get_bulk_item_result",
+    {
+      description: GET_BULK_ITEM_RESULT_DESCRIPTION,
+      inputSchema: getBulkItemResultSchema,
+      annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
+    },
+    async (input) => {
+      try {
+        const apiKey = requireApiKey(ctx);
+        const body = await callItemResult(apiKey, input.item_id);
         return textResult(body);
       } catch (err) {
         return errorResult(err instanceof Error ? err.message : String(err));

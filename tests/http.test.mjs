@@ -42,7 +42,7 @@ try {
   await client.connect(transport);
 
   const { tools } = await client.listTools();
-  check("HTTP: 15 tools listed", tools.length === 15, `got ${tools.length}`);
+  check("HTTP: 15 tools listed", tools.length === 16, `got ${tools.length}`);
 
   const cat = await client.callTool({ name: "list_operations", arguments: {} });
   const catalog = JSON.parse(cat.content[0].text);

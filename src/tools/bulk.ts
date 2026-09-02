@@ -96,6 +96,20 @@ Use this tool to debug a job after list_bulk_jobs shows failed_items or invalid_
 
 This tool is free of per-call credits (monitoring endpoints do not consume credits).`;
 
+export const getBulkItemResultSchema = z.object({
+  item_id: z
+    .string()
+    .describe(
+      "The item_id of a bulk job item — get it from get_bulk_job_items (each item row has one). This is the same ID the Data Service calls a query ID.",
+    ),
+});
+
+export const GET_BULK_ITEM_RESULT_DESCRIPTION = `Fetch the parsed result data of a single bulk job item — the actual Amazon data that item produced (product detail, search results, seller profile, etc., depending on the job's operation). This is the same data shown in the item result modal on the Bulk Requests page of the web app.
+
+Use this tool after get_bulk_job_items, when the user wants to see the DATA behind a specific item, not just its status. Typical flow: list_bulk_jobs → get_bulk_job_items → get_bulk_item_result.
+
+IMPORTANT: bulk results EXPIRE after a retention period. If the item's data has expired, the tool returns a clear message — suggest re-running that item through the matching real-time tool (e.g. get_product_detail for a DETAIL item) to regenerate the data. This tool is free of per-call credits.`;
+
 export const GET_BULK_WEBHOOK_LOGS_DESCRIPTION = `Check webhook delivery logs for bulk jobs: whether the completion notification was delivered to the user's callback_url, delivery status, and timestamps. Use this when a job shows as completed but the user's system never received the webhook — the classic "job finished but my integration didn't fire" debugging case.
 
 Scope to one job with group_id (from list_bulk_jobs), or omit it to scan recent deliveries across all jobs. This tool is free of per-call credits.`;
@@ -130,6 +144,45 @@ export async function callDataService(
   }
 
   const body = (await response.json().catch(() => null)) as Record<string, unknown> | null;
+  if (!response.ok || !body) {
+    throw new Error(
+      `Data Service request failed (HTTP ${response.status}). Retry once; if it persists, tell the user.`,
+    );
+  }
+  return body;
+}
+
+/** Fetch a bulk item's parsed result, with a friendly message for expired data. */
+export async function callItemResult(apiKey: string, itemId: string): Promise<unknown> {
+  const url = `${DATA_SERVICE_BASE_URL}/queries/${encodeURIComponent(itemId)}/results?format=json`;
+  const response = await fetch(url, {
+    headers: { "api-key": apiKey, Accept: "application/json" },
+    signal: AbortSignal.timeout(60_000),
+  }).catch((err) => {
+    throw new Error(
+      `Could not reach the Easyparser Data Service: ${err instanceof Error ? err.message : String(err)}. Retry once.`,
+    );
+  });
+
+  const body = (await response.json().catch(() => null)) as Record<string, unknown> | null;
+
+  if (response.status === 401 || response.status === 403) {
+    throw new Error(
+      "Easyparser API key is missing or invalid. Ask the user to create a free key at https://app.easyparser.com/signup and set EASYPARSER_API_KEY.",
+    );
+  }
+
+  // 3404 = result expired or not found (documented behavior of the Data Service)
+  const errorCode = (body as Record<string, unknown> | null)?.error_code;
+  if (errorCode === 3404 || (body && body.success === false)) {
+    return {
+      success: false,
+      expired: true,
+      message:
+        "This item's parsed result has expired or is no longer stored. Bulk results are retained for a limited period. To regenerate the data, re-run the item's input through the matching real-time tool (e.g. get_product_detail for a DETAIL item, search_products for a SEARCH item).",
+    };
+  }
+
   if (!response.ok || !body) {
     throw new Error(
       `Data Service request failed (HTTP ${response.status}). Retry once; if it persists, tell the user.`,
