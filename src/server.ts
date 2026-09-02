@@ -5,6 +5,15 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { callEasyparser, EasyparserApiError } from "./client.js";
+import {
+  callDataService,
+  GET_BULK_JOB_ITEMS_DESCRIPTION,
+  GET_BULK_WEBHOOK_LOGS_DESCRIPTION,
+  getBulkJobItemsSchema,
+  getBulkWebhookLogsSchema,
+  LIST_BULK_JOBS_DESCRIPTION,
+  listBulkJobsSchema,
+} from "./tools/bulk.js";
 import { TOOL_DEFINITIONS } from "./tools/definitions.js";
 import {
   buildOperationsCatalogResponse,
@@ -22,7 +31,8 @@ Decision rules:
 3. Only a product name or category → search_products to find ASINs, then drill down.
 4. Cost awareness: most tools cost 1 credit. get_sales_history costs 5+ credits — confirm the history depth with the user before calling. Paginated tools cost 1 credit per page — prefer filters over extra pages.
 5. Every response includes credits_remaining. If it drops low or a call returns a rate-limit error, tell the user to get a free key at https://app.easyparser.com/signup.
-6. If unsure which tool fits, call list_operations — it is free and works without a key.`;
+6. If unsure which tool fits, call list_operations — it is free and works without a key.
+7. Bulk jobs: use list_bulk_jobs to see the user's bulk extraction jobs (including ones started from the Easyparser web app), get_bulk_job_items to debug failed items inside a job, and get_bulk_webhook_logs when a completed job's webhook never arrived. These monitoring tools are free.`;
 
 export interface ServerContext {
   /** Resolves the API key for the current request/session. */
@@ -69,7 +79,7 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
   const server = new McpServer(
     {
       name: "easyparser-mcp",
-      version: "1.0.0",
+      version: "1.1.0",
     },
     {
       instructions: SERVER_INSTRUCTIONS,
@@ -130,6 +140,93 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
     },
     async (input) => {
       return textResult(buildOperationsCatalogResponse(input.operation));
+    },
+  );
+
+  // Bulk job monitoring: list_bulk_jobs
+  server.registerTool(
+    "list_bulk_jobs",
+    {
+      description: LIST_BULK_JOBS_DESCRIPTION,
+      inputSchema: listBulkJobsSchema,
+      annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
+    },
+    async (input) => {
+      try {
+        const apiKey = requireApiKey(ctx);
+        const body = await callDataService(apiKey, "/bulk/bulk-requests", {
+          page: input.page,
+          limit: input.limit,
+          sort_direction: input.sort_direction,
+          status: input.status,
+          operation: input.operation,
+          domain: input.domain,
+          bulk_request_id: input.bulk_request_id,
+        });
+        return textResult(body);
+      } catch (err) {
+        return errorResult(err instanceof Error ? err.message : String(err));
+      }
+    },
+  );
+
+  // Bulk job monitoring: get_bulk_job_items
+  server.registerTool(
+    "get_bulk_job_items",
+    {
+      description: GET_BULK_JOB_ITEMS_DESCRIPTION,
+      inputSchema: getBulkJobItemsSchema,
+      annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
+    },
+    async (input) => {
+      try {
+        const apiKey = requireApiKey(ctx);
+        const body = await callDataService(
+          apiKey,
+          `/bulk/bulk-requests/${input.group_id}/items`,
+          {
+            page: input.page,
+            limit: input.limit,
+            sort_direction: input.sort_direction,
+            status: input.status,
+            search_key: input.search_key,
+            date_from: input.date_from,
+            date_to: input.date_to,
+          },
+        );
+        return textResult(body);
+      } catch (err) {
+        return errorResult(err instanceof Error ? err.message : String(err));
+      }
+    },
+  );
+
+  // Bulk job monitoring: get_bulk_webhook_logs
+  server.registerTool(
+    "get_bulk_webhook_logs",
+    {
+      description: GET_BULK_WEBHOOK_LOGS_DESCRIPTION,
+      inputSchema: getBulkWebhookLogsSchema,
+      annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
+    },
+    async (input) => {
+      try {
+        const apiKey = requireApiKey(ctx);
+        const body = await callDataService(apiKey, "/bulk/webhook-logs", {
+          page: input.page,
+          limit: input.limit,
+          sort_direction: input.sort_direction,
+          group_id: input.group_id,
+          status: input.status,
+          bulk_request_id: input.bulk_request_id,
+          request_id: input.request_id,
+          date_from: input.date_from,
+          date_to: input.date_to,
+        });
+        return textResult(body);
+      } catch (err) {
+        return errorResult(err instanceof Error ? err.message : String(err));
+      }
     },
   );
 

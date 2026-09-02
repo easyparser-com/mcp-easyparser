@@ -31,7 +31,7 @@ const httpServer = createServer(async (req: IncomingMessage, res: ServerResponse
 
   if (url.pathname === "/health") {
     res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ status: "ok", server: "easyparser-mcp", version: "1.0.0" }));
+    res.end(JSON.stringify({ status: "ok", server: "easyparser-mcp", version: "1.1.0" }));
     return;
   }
 

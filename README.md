@@ -28,6 +28,9 @@ Product details, seller offers, search results, 12-month sales history, Best Sel
 | `get_seller_feedback` | Individual buyer feedback, filterable by rating/period | 1 credit/page |
 | `list_operations` | Free discovery catalog — works **without** a key | 0 credits |
 | `check_credits` | Credit balance for the configured key | 1 credit probe |
+| `list_bulk_jobs` | Your bulk extraction jobs with progress — including jobs started from the [web app](https://app.easyparser.com/bulk-requests) | free |
+| `get_bulk_job_items` | Per-item outcomes inside a bulk job (debug failed/invalid items) | free |
+| `get_bulk_webhook_logs` | Webhook delivery logs for bulk job completions | free |
 
 ## Get your API key
 
@@ -134,6 +137,11 @@ and what do their negative reviews say?
 ```
 Compare the top 10 organic results for "stainless steel water bottle" on
 amazon.de — prices, ratings, and which ones are Prime.
+```
+
+```
+Is the bulk job I started this morning finished? If any items failed,
+tell me which ASINs and why.
 ```
 
 ## Self-hosting the HTTP server
