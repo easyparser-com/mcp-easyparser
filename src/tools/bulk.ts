@@ -108,7 +108,7 @@ export const GET_BULK_ITEM_RESULT_DESCRIPTION = `Fetch the parsed result data of
 
 Use this tool after get_bulk_job_items, when the user wants to see the DATA behind a specific item, not just its status. Typical flow: list_bulk_jobs → get_bulk_job_items → get_bulk_item_result.
 
-IMPORTANT: bulk results EXPIRE after a retention period. If the item's data has expired, the tool returns a clear message — suggest re-running that item through the matching real-time tool (e.g. get_product_detail for a DETAIL item) to regenerate the data. This tool is free of per-call credits.`;
+IMPORTANT: bulk results are retained for 24 HOURS after the job completes, then they expire. If the item's data has expired, the tool returns a clear message — suggest re-running that item through the matching real-time tool (e.g. get_product_detail for a DETAIL item) to regenerate the data. This tool is free of per-call credits.`;
 
 export const GET_BULK_WEBHOOK_LOGS_DESCRIPTION = `Check webhook delivery logs for bulk jobs: whether the completion notification was delivered to the user's callback_url, delivery status, and timestamps. Use this when a job shows as completed but the user's system never received the webhook — the classic "job finished but my integration didn't fire" debugging case.
 
@@ -179,7 +179,7 @@ export async function callItemResult(apiKey: string, itemId: string): Promise<un
       success: false,
       expired: true,
       message:
-        "This item's parsed result has expired or is no longer stored. Bulk results are retained for a limited period. To regenerate the data, re-run the item's input through the matching real-time tool (e.g. get_product_detail for a DETAIL item, search_products for a SEARCH item).",
+        "This item's parsed result has expired or is no longer stored. Bulk results are retained for 24 hours after job completion. To regenerate the data, re-run the item's input through the matching real-time tool (e.g. get_product_detail for a DETAIL item, search_products for a SEARCH item).",
     };
   }
 
