@@ -145,13 +145,16 @@ Add to `claude_desktop_config.json`:
 
 ### Manus
 
-Go to **Settings → Integrations → Custom MCP Servers → Add Server**:
+Go to **Settings → Integrations → Custom MCP Servers → Add Server** and fill in the form:
 
 | Field | Value |
 |---|---|
 | Server name | `Easyparser` |
+| Transport type | `HTTP` |
 | Server URL | `https://mcp.easyparser.com/mcp` |
-| Authentication | Bearer token: your Easyparser API key |
+| Custom headers | Header name: `Authorization` — value: `Bearer YOUR_API_KEY` (paste your Easyparser API key after "Bearer ") |
+
+Click **Test** to verify the connection, then **Save**. The value is always your Easyparser API key — no separate token is needed.
 
 ### Any MCP client
 
