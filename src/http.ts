@@ -21,8 +21,10 @@ const PORT = Number(process.env.PORT ?? 3000);
 function extractApiKey(req: IncomingMessage): string | undefined {
   const auth = req.headers.authorization;
   if (auth?.startsWith("Bearer ")) return auth.slice(7).trim();
-  const xApiKey = req.headers["x-api-key"];
-  if (typeof xApiKey === "string" && xApiKey.length > 0) return xApiKey;
+  for (const h of ["x-api-key", "api-key", "apikey"]) {
+    const v = req.headers[h];
+    if (typeof v === "string" && v.length > 0) return v;
+  }
   return process.env.EASYPARSER_API_KEY;
 }
 
