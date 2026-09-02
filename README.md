@@ -16,44 +16,59 @@ Product details, seller offers, search results, 12-month sales history, Best Sel
 
 **Product data**
 
-| Tool | What it returns | Cost |
-|---|---|---|
-| `get_product_detail` | Full product profile: title, price, images, rating, BSR, variants, reviews | 1 credit (+1 with A+ content) |
-| `get_product_offers` | Every seller offer: prices, conditions, FBA/FBM, Buy Box winner | 1 credit per page (max 5) |
-| `get_bestseller_rank` | Current Best Sellers Rank by category | 1 credit |
-| `get_package_dimensions` | Exact dimensions, weight, Amazon fee category | 1 credit |
-| `get_sales_history` | 12-month weekly trends: views, sales, price, BSR | 5 credits + 1 per month of history (max 17) |
+<table>
+<thead><tr><th width="220">Tool</th><th>What it returns</th><th width="260">Cost</th></tr></thead>
+<tbody>
+<tr><td><code>get_product_detail</code></td><td>Full product profile: title, price, images, rating, BSR, variants, reviews</td><td>1 credit (+1 with A+ content)</td></tr>
+<tr><td><code>get_product_offers</code></td><td>Every seller offer: prices, conditions, FBA/FBM, Buy Box winner</td><td>1 credit per page (max 5)</td></tr>
+<tr><td><code>get_bestseller_rank</code></td><td>Current Best Sellers Rank by category</td><td>1 credit</td></tr>
+<tr><td><code>get_package_dimensions</code></td><td>Exact dimensions, weight, Amazon fee category</td><td>1 credit</td></tr>
+<tr><td><code>get_sales_history</code></td><td>12-month weekly trends: views, sales, price, BSR</td><td>5 credits + 1 per month of history (max 17)</td></tr>
+</tbody>
+</table>
 
 **Search & discovery**
 
-| Tool | What it returns | Cost |
-|---|---|---|
-| `search_products` | Keyword/category results with prices, ratings, badges | 1 credit per page (max 5) |
-| `lookup_product` | UPC/EAN/GTIN/ISBN → ASIN conversion | 1 credit |
+<table>
+<thead><tr><th width="220">Tool</th><th>What it returns</th><th width="260">Cost</th></tr></thead>
+<tbody>
+<tr><td><code>search_products</code></td><td>Keyword/category results with prices, ratings, badges</td><td>1 credit per page (max 5)</td></tr>
+<tr><td><code>lookup_product</code></td><td>UPC/EAN/GTIN/ISBN → ASIN conversion</td><td>1 credit</td></tr>
+</tbody>
+</table>
 
 **Seller intelligence**
 
-| Tool | What it returns | Cost |
-|---|---|---|
-| `get_seller_profile` | Seller legal name, address, 30/90/365-day feedback trends | 1 credit |
-| `get_seller_products` | A seller's full catalog with prices and ratings | 1 credit per page (max 5) |
-| `get_seller_feedback` | Individual buyer feedback, filterable by rating/period | 1 credit per page (max 5) |
+<table>
+<thead><tr><th width="220">Tool</th><th>What it returns</th><th width="260">Cost</th></tr></thead>
+<tbody>
+<tr><td><code>get_seller_profile</code></td><td>Seller legal name, address, 30/90/365-day feedback trends</td><td>1 credit</td></tr>
+<tr><td><code>get_seller_products</code></td><td>A seller's full catalog with prices and ratings</td><td>1 credit per page (max 5)</td></tr>
+<tr><td><code>get_seller_feedback</code></td><td>Individual buyer feedback, filterable by rating/period</td><td>1 credit per page (max 5)</td></tr>
+</tbody>
+</table>
 
 **Bulk job monitoring** — tracks jobs started from the [web app](https://app.easyparser.com/bulk-requests) or the Bulk API
 
-| Tool | What it returns | Cost |
-|---|---|---|
-| `list_bulk_jobs` | Your bulk jobs with progress: status, completed/failed/invalid counts | Free |
-| `get_bulk_job_items` | Per-item outcomes inside a job (debug failed/invalid items) | Free |
-| `get_bulk_item_result` | The parsed data an item produced (retained 24 hours) | Free |
-| `get_bulk_webhook_logs` | Webhook delivery logs for job completions | Free |
+<table>
+<thead><tr><th width="220">Tool</th><th>What it returns</th><th width="260">Cost</th></tr></thead>
+<tbody>
+<tr><td><code>list_bulk_jobs</code></td><td>Your bulk jobs with progress: status, completed/failed/invalid counts</td><td>Free</td></tr>
+<tr><td><code>get_bulk_job_items</code></td><td>Per-item outcomes inside a job (debug failed/invalid items)</td><td>Free</td></tr>
+<tr><td><code>get_bulk_item_result</code></td><td>The parsed data an item produced (retained 24 hours)</td><td>Free</td></tr>
+<tr><td><code>get_bulk_webhook_logs</code></td><td>Webhook delivery logs for job completions</td><td>Free</td></tr>
+</tbody>
+</table>
 
 **Account & discovery**
 
-| Tool | What it returns | Cost |
-|---|---|---|
-| `list_operations` | Operations catalog with parameters, costs, and supported domains — works **without** a key | Free |
-| `check_credits` | Plan, credit balance, rate limits, and this month's daily usage by operation | Free |
+<table>
+<thead><tr><th width="220">Tool</th><th>What it returns</th><th width="260">Cost</th></tr></thead>
+<tbody>
+<tr><td><code>list_operations</code></td><td>Operations catalog with parameters, costs, and supported domains — works <strong>without</strong> a key</td><td>Free</td></tr>
+<tr><td><code>check_credits</code></td><td>Plan, credit balance, rate limits, and this month's daily usage by operation</td><td>Free</td></tr>
+</tbody>
+</table>
 
 ## Get your API key
 
