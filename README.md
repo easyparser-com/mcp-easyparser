@@ -14,24 +14,46 @@ Product details, seller offers, search results, 12-month sales history, Best Sel
 
 ## What your agent can do
 
+**Product data**
+
 | Tool | What it returns | Cost |
 |---|---|---|
-| `get_product_detail` | Full product profile: title, price, images, rating, BSR, variants, reviews | 1 credit |
-| `get_product_offers` | Every seller offer: prices, conditions, FBA/FBM, Buy Box winner | 1 credit/page |
-| `search_products` | Keyword/category results with prices, ratings, badges | 1 credit/page |
-| `lookup_product` | UPC/EAN/GTIN/ISBN → ASIN conversion | 1 credit |
-| `get_sales_history` | 12-month weekly trends: views, sales, price, BSR | 5–17 credits |
+| `get_product_detail` | Full product profile: title, price, images, rating, BSR, variants, reviews | 1 credit (+1 with A+ content) |
+| `get_product_offers` | Every seller offer: prices, conditions, FBA/FBM, Buy Box winner | 1 credit per page (max 5) |
 | `get_bestseller_rank` | Current Best Sellers Rank by category | 1 credit |
 | `get_package_dimensions` | Exact dimensions, weight, Amazon fee category | 1 credit |
+| `get_sales_history` | 12-month weekly trends: views, sales, price, BSR | 5 credits + 1 per month of history (max 17) |
+
+**Search & discovery**
+
+| Tool | What it returns | Cost |
+|---|---|---|
+| `search_products` | Keyword/category results with prices, ratings, badges | 1 credit per page (max 5) |
+| `lookup_product` | UPC/EAN/GTIN/ISBN → ASIN conversion | 1 credit |
+
+**Seller intelligence**
+
+| Tool | What it returns | Cost |
+|---|---|---|
 | `get_seller_profile` | Seller legal name, address, 30/90/365-day feedback trends | 1 credit |
-| `get_seller_products` | A seller's full catalog with prices and ratings | 1 credit/page |
-| `get_seller_feedback` | Individual buyer feedback, filterable by rating/period | 1 credit/page |
-| `list_operations` | Free discovery catalog — works **without** a key | 0 credits |
-| `check_credits` | Plan, credit balance, rate limits, and this month's daily usage by operation | free |
-| `list_bulk_jobs` | Your bulk extraction jobs with progress — including jobs started from the [web app](https://app.easyparser.com/bulk-requests) | free |
-| `get_bulk_job_items` | Per-item outcomes inside a bulk job (debug failed/invalid items) | free |
-| `get_bulk_webhook_logs` | Webhook delivery logs for bulk job completions | free |
-| `get_bulk_item_result` | The parsed data a bulk item produced (results expire after a retention period) | free |
+| `get_seller_products` | A seller's full catalog with prices and ratings | 1 credit per page (max 5) |
+| `get_seller_feedback` | Individual buyer feedback, filterable by rating/period | 1 credit per page (max 5) |
+
+**Bulk job monitoring** — tracks jobs started from the [web app](https://app.easyparser.com/bulk-requests) or the Bulk API
+
+| Tool | What it returns | Cost |
+|---|---|---|
+| `list_bulk_jobs` | Your bulk jobs with progress: status, completed/failed/invalid counts | Free |
+| `get_bulk_job_items` | Per-item outcomes inside a job (debug failed/invalid items) | Free |
+| `get_bulk_item_result` | The parsed data an item produced (retained 24 hours) | Free |
+| `get_bulk_webhook_logs` | Webhook delivery logs for job completions | Free |
+
+**Account & discovery**
+
+| Tool | What it returns | Cost |
+|---|---|---|
+| `list_operations` | Operations catalog with parameters, costs, and supported domains — works **without** a key | Free |
+| `check_credits` | Plan, credit balance, rate limits, and this month's daily usage by operation | Free |
 
 ## Get your API key
 
