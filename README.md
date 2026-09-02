@@ -73,7 +73,7 @@ Product details, seller offers, search results, 12-month sales history, Best Sel
 
 ## Get your API key
 
-Sign up at [app.easyparser.com/signup](https://app.easyparser.com/signup) — free tier included, no credit card required. Copy your key from **Account → Plan**.
+Sign up at [app.easyparser.com/signup](https://app.easyparser.com/signup) — free tier included, no credit card required. Copy your API key from [Account → Plan](https://app.easyparser.com/account/plan).
 
 ## Setup
 
@@ -81,7 +81,7 @@ Two ways to connect: the **hosted remote server** (no install, always up to date
 
 ### Cursor
 
-One-click install (opens Cursor with the configuration pre-filled — replace `YOUR_API_KEY` when prompted):
+One-click install (opens Cursor with the configuration pre-filled — replace `YOUR_API_KEY` with your key from [Account → Plan](https://app.easyparser.com/account/plan)):
 
 - **Remote server:** [Add to Cursor](cursor://anysphere.cursor-deeplink/mcp/install?name=easyparser&config=eyJ1cmwiOiJodHRwczovL21jcC5lYXN5cGFyc2VyLmNvbS9tY3AiLCJoZWFkZXJzIjp7IkF1dGhvcml6YXRpb24iOiJCZWFyZXIgWU9VUl9BUElfS0VZIn19)
 - **Local (npx):** [Add to Cursor](cursor://anysphere.cursor-deeplink/mcp/install?name=easyparser&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImVhc3lwYXJzZXItbWNwIl0sImVudiI6eyJFQVNZUEFSU0VSX0FQSV9LRVkiOiJZT1VSX0FQSV9LRVkifX0%3D)
@@ -102,7 +102,7 @@ Or add manually to `.cursor/mcp.json`:
 
 ### VS Code
 
-One-click install (VS Code asks for your API key securely via an input prompt):
+One-click install (VS Code asks for your API key securely via an input prompt — get it from [Account → Plan](https://app.easyparser.com/account/plan)):
 
 - **Remote server:** [Add to VS Code](vscode:mcp/install?%7B%22name%22%3A%22easyparser%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A//mcp.easyparser.com/mcp%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20%24%7Binput%3Aeasyparser-api-key%7D%22%7D%7D)
 
@@ -154,11 +154,11 @@ Go to **Settings → Integrations → Custom MCP Servers → Add Server** and fi
 | Server URL | `https://mcp.easyparser.com/mcp` |
 | Custom headers | Header name: `Authorization` — value: `Bearer YOUR_API_KEY` (paste your Easyparser API key after "Bearer ") |
 
-Click **Test** to verify the connection, then **Save**. The value is always your Easyparser API key — no separate token is needed.
+Click **Test** to verify the connection, then **Save**. The value is always your Easyparser API key from [Account → Plan](https://app.easyparser.com/account/plan) — no separate token is needed.
 
 ### Any MCP client
 
-The hosted endpoint speaks [Streamable HTTP](https://modelcontextprotocol.io/specification/2025-06-18/basic/transports#streamable-http) at `https://mcp.easyparser.com/mcp`. Authenticate with `Authorization: Bearer YOUR_API_KEY` — `x-api-key` and `api-key` headers work too. The `list_operations` discovery tool works without a key, so agents can explore before signing up.
+The hosted endpoint speaks [Streamable HTTP](https://modelcontextprotocol.io/specification/2025-06-18/basic/transports#streamable-http) at `https://mcp.easyparser.com/mcp`. Authenticate with `Authorization: Bearer YOUR_API_KEY` (your key from [Account → Plan](https://app.easyparser.com/account/plan)) — `x-api-key` and `api-key` headers work too. The `list_operations` discovery tool works without a key, so agents can explore before signing up.
 
 For local stdio clients, run `npx -y easyparser-mcp` with `EASYPARSER_API_KEY` set in the environment.
 
