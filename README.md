@@ -27,7 +27,7 @@ Product details, seller offers, search results, 12-month sales history, Best Sel
 | `get_seller_products` | A seller's full catalog with prices and ratings | 1 credit/page |
 | `get_seller_feedback` | Individual buyer feedback, filterable by rating/period | 1 credit/page |
 | `list_operations` | Free discovery catalog — works **without** a key | 0 credits |
-| `check_credits` | Credit balance for the configured key | 1 credit probe |
+| `check_credits` | Plan, credit balance, rate limits, and this month's daily usage by operation | free |
 | `list_bulk_jobs` | Your bulk extraction jobs with progress — including jobs started from the [web app](https://app.easyparser.com/bulk-requests) | free |
 | `get_bulk_job_items` | Per-item outcomes inside a bulk job (debug failed/invalid items) | free |
 | `get_bulk_webhook_logs` | Webhook delivery logs for bulk job completions | free |

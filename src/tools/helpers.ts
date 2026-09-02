@@ -109,4 +109,6 @@ export function buildOperationsCatalogResponse(operation?: string) {
 
 export const checkCreditsSchema = z.object({});
 
-export const CHECK_CREDITS_DESCRIPTION = `Check the current Easyparser credit balance and recent usage for the configured API key. Use this before running expensive multi-page or 12-month-history jobs, and whenever the user asks about their quota. Requires an API key.`;
+export const CHECK_CREDITS_DESCRIPTION = `Check the Easyparser account: current plan, credit balance (used/remaining/limit), credit reset date, per-minute rate limits, and this month's daily usage breakdown by operation. FREE — this calls the Account API and consumes no credits.
+
+Use this before running expensive multi-page or 12-month-history jobs, when the user asks about their quota or plan, or to analyze usage patterns (e.g. 'which operation consumed the most credits this month?'). Requires an API key.`;

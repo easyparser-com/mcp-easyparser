@@ -4,6 +4,7 @@
  */
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
+import { callAccountApi } from "./account.js";
 import { callEasyparser, EasyparserApiError } from "./client.js";
 import {
   callDataService,
@@ -82,7 +83,7 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
   const server = new McpServer(
     {
       name: "easyparser-mcp",
-      version: "1.2.0",
+      version: "1.3.0",
     },
     {
       instructions: SERVER_INSTRUCTIONS,
@@ -263,18 +264,11 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
     async () => {
       try {
         const apiKey = requireApiKey(ctx);
-        // Cheapest possible probe: BSR on a well-known ASIN costs 1 credit and
-        // returns the credit envelope.
-        const result = await callEasyparser(apiKey, {
-          operation: "BEST_SELLERS_RANK",
-          domain: ".com",
-          asin: "B0F25371FH",
-        });
+        // Account API: free of per-call credits, returns plan + balance + usage.
+        const info = await callAccountApi(apiKey);
         return textResult({
-          success: true,
-          credits_remaining: result.credits_remaining,
-          credits_used_this_probe: result.credits_used,
-          note: "This check consumed 1 credit (cheapest available probe). Plan details: https://app.easyparser.com/account/plan",
+          ...info,
+          note: "This check is free (Account API consumes no credits). Plan management: https://app.easyparser.com/account/plan",
         });
       } catch (err) {
         if (err instanceof EasyparserApiError) return errorResult(err.message);
