@@ -9,9 +9,9 @@
   <br><br>
 </div>
 
-The official **Easyparser MCP server** — give your AI agent real-time, structured Amazon data across 21 marketplaces through the [Model Context Protocol](https://modelcontextprotocol.io).
+The official **Easyparser MCP server**: give your AI agent real-time, structured Amazon data across 21 marketplaces through the [Model Context Protocol](https://modelcontextprotocol.io).
 
-Product details, seller offers, search results, 12-month sales history, Best Sellers Rank, package dimensions, seller legal identities, catalogs, and feedback — 10 data operations plus bulk-job monitoring and account tools, one connection.
+Product details, seller offers, search results, 12-month sales history, Best Sellers Rank, package dimensions, seller legal identities, catalogs, and feedback. 10 data operations plus bulk-job monitoring and account tools, one connection.
 
 ## What your agent can do
 
@@ -49,7 +49,7 @@ Product details, seller offers, search results, 12-month sales history, Best Sel
 </tbody>
 </table>
 
-**Bulk job monitoring** — tracks jobs started from the [web app](https://app.easyparser.com/bulk-requests) or the Bulk API
+**Bulk job monitoring**: tracks jobs started from the [web app](https://app.easyparser.com/bulk-requests) or the Bulk API
 
 <table>
 <thead><tr><th width="220">Tool</th><th>What it returns</th><th width="260">Cost</th></tr></thead>
@@ -66,22 +66,22 @@ Product details, seller offers, search results, 12-month sales history, Best Sel
 <table>
 <thead><tr><th width="220">Tool</th><th>What it returns</th><th width="260">Cost</th></tr></thead>
 <tbody>
-<tr><td><code>list_operations</code></td><td>Operations catalog with parameters, costs, and supported domains — works <strong>without</strong> a key</td><td>Free</td></tr>
+<tr><td><code>list_operations</code></td><td>Operations catalog with parameters, costs, and supported domains. Works <strong>without</strong> a key</td><td>Free</td></tr>
 <tr><td><code>check_credits</code></td><td>Plan, credit balance, rate limits, and this month's daily usage by operation</td><td>Free</td></tr>
 </tbody>
 </table>
 
 ## Get your API key
 
-Sign up at [app.easyparser.com/signup](https://app.easyparser.com/signup) — free tier included, no credit card required. Copy your API key from [Account → Plan](https://app.easyparser.com/account/plan).
+Sign up at [app.easyparser.com/signup](https://app.easyparser.com/signup): free tier included, no credit card required. Copy your API key from [Account → Plan](https://app.easyparser.com/account/plan). Wherever a setup step below asks for `YOUR_API_KEY`, paste this key.
 
 ## Setup
 
 Two ways to connect: the **hosted remote server** (no install, always up to date) or **local via npx** (runs on your machine).
 
-### Cursor
+### <img src="https://cursor.com/favicon.ico" width="18" height="18" alt="Cursor"> Cursor
 
-One-click install (opens Cursor with the configuration pre-filled — replace `YOUR_API_KEY` with your key from [Account → Plan](https://app.easyparser.com/account/plan)):
+One-click install (opens Cursor with the configuration pre-filled; replace `YOUR_API_KEY` when prompted):
 
 - **Remote server:** [Add to Cursor](cursor://anysphere.cursor-deeplink/mcp/install?name=easyparser&config=eyJ1cmwiOiJodHRwczovL21jcC5lYXN5cGFyc2VyLmNvbS9tY3AiLCJoZWFkZXJzIjp7IkF1dGhvcml6YXRpb24iOiJCZWFyZXIgWU9VUl9BUElfS0VZIn19)
 - **Local (npx):** [Add to Cursor](cursor://anysphere.cursor-deeplink/mcp/install?name=easyparser&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImVhc3lwYXJzZXItbWNwIl0sImVudiI6eyJFQVNZUEFSU0VSX0FQSV9LRVkiOiJZT1VSX0FQSV9LRVkifX0%3D)
@@ -100,9 +100,9 @@ Or add manually to `.cursor/mcp.json`:
 }
 ```
 
-### VS Code
+### <img src="https://code.visualstudio.com/favicon.ico" width="18" height="18" alt="VS Code"> VS Code
 
-One-click install (VS Code asks for your API key securely via an input prompt — get it from [Account → Plan](https://app.easyparser.com/account/plan)):
+One-click install (VS Code asks for your API key securely via an input prompt):
 
 - **Remote server:** [Add to VS Code](vscode:mcp/install?%7B%22name%22%3A%22easyparser%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A//mcp.easyparser.com/mcp%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20%24%7Binput%3Aeasyparser-api-key%7D%22%7D%7D)
 
@@ -120,30 +120,25 @@ Or add manually to `.vscode/mcp.json`:
 }
 ```
 
-### Claude Code
+### <img src="https://claude.ai/favicon.ico" width="18" height="18" alt="Claude"> Claude Code
 
 ```bash
 claude mcp add --scope user --transport http easyparser https://mcp.easyparser.com/mcp \
   --header "Authorization: Bearer YOUR_API_KEY"
 ```
 
-### Claude Desktop
+### <img src="https://claude.ai/favicon.ico" width="18" height="18" alt="Claude"> Claude Desktop & claude.ai
 
-Add to `claude_desktop_config.json`:
+Add a custom connector:
 
-```json
-{
-  "mcpServers": {
-    "easyparser": {
-      "command": "npx",
-      "args": ["-y", "easyparser-mcp"],
-      "env": { "EASYPARSER_API_KEY": "YOUR_API_KEY" }
-    }
-  }
-}
-```
+1. Open **Settings → Connectors → Add → Add custom connector**.
+2. **Name:** `Easyparser`
+3. **Remote MCP server URL:** `https://mcp.easyparser.com/mcp` and click **Continue**.
+4. Under **Authentication**, select **None** (Easyparser uses an API key, not OAuth).
+5. Under **Request headers**, add a header: name `authorization`, value `Bearer YOUR_API_KEY`, marked **Required**.
+6. Click **Add**.
 
-### Manus
+### <img src="https://manus.im/favicon.ico" width="18" height="18" alt="Manus"> Manus
 
 Go to **Settings → Integrations → Custom MCP Servers → Add Server** and fill in the form:
 
@@ -152,13 +147,13 @@ Go to **Settings → Integrations → Custom MCP Servers → Add Server** and fi
 | Server name | `Easyparser` |
 | Transport type | `HTTP` |
 | Server URL | `https://mcp.easyparser.com/mcp` |
-| Custom headers | Header name: `Authorization` — value: `Bearer YOUR_API_KEY` (paste your Easyparser API key after "Bearer ") |
+| Custom headers | Header name: `Authorization`, value: `Bearer YOUR_API_KEY` (paste your Easyparser API key after "Bearer ") |
 
-Click **Test** to verify the connection, then **Save**. The value is always your Easyparser API key from [Account → Plan](https://app.easyparser.com/account/plan) — no separate token is needed.
+Click **Test** to verify the connection, then **Save**. The value is always your Easyparser API key; no separate token is needed.
 
 ### Any MCP client
 
-The hosted endpoint speaks [Streamable HTTP](https://modelcontextprotocol.io/specification/2025-06-18/basic/transports#streamable-http) at `https://mcp.easyparser.com/mcp`. Authenticate with `Authorization: Bearer YOUR_API_KEY` (your key from [Account → Plan](https://app.easyparser.com/account/plan)) — `x-api-key` and `api-key` headers work too. The `list_operations` discovery tool works without a key, so agents can explore before signing up.
+The hosted endpoint speaks [Streamable HTTP](https://modelcontextprotocol.io/specification/2025-06-18/basic/transports#streamable-http) at `https://mcp.easyparser.com/mcp`. Authenticate with `Authorization: Bearer YOUR_API_KEY`; the `x-api-key` and `api-key` headers work too. The `list_operations` discovery tool works without a key, so agents can explore before signing up.
 
 For local stdio clients, run `npx -y easyparser-mcp` with `EASYPARSER_API_KEY` set in the environment.
 
@@ -179,7 +174,7 @@ and what do their negative reviews say?
 
 ```
 Compare the top 10 organic results for "stainless steel water bottle" on
-amazon.de — prices, ratings, and which ones are Prime.
+amazon.de: prices, ratings, and which ones are Prime.
 ```
 
 ```
@@ -209,4 +204,4 @@ This server is a thin, read-only adapter over the [Easyparser Real-Time API](htt
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).
