@@ -1,5 +1,14 @@
 # easyparser-mcp
 
+<div align="center">
+  <br>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://easyparser.com/assets/svg/logos/logo-white-2.svg">
+    <img alt="Easyparser" src="https://easyparser.com/assets/svg/logos/logo.svg" width="260">
+  </picture>
+  <br><br>
+</div>
+
 The official **Easyparser MCP server** — give your AI agent real-time, structured Amazon data across 21 marketplaces through the [Model Context Protocol](https://modelcontextprotocol.io).
 
 Product details, seller offers, search results, 12-month sales history, Best Sellers Rank, package dimensions, seller legal identities, catalogs, and feedback — 10 operations, one connection.
