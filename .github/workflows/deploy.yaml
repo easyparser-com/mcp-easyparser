@@ -1,0 +1,86 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      env:
+        required: true
+        type: string
+      docker_project:
+        required: true
+        type: string
+      docker_repo:
+        required: true
+        type: string
+      branch:
+        required: true
+        type: string
+      run_number:
+        required: true
+        type: string
+    secrets:
+      registry_url:
+        required: true
+      registry_user:
+        required: true
+      registry_pass:
+        required: true
+      infra_secret:
+        required: true
+      git_user:
+        required: true
+      git_email:
+        required: true
+
+jobs:
+  Project:
+    runs-on:
+      - easyparser-com
+      - aws
+    steps:
+      - name: Checkout app
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Harbor login
+        run: |
+          echo "${{ secrets.registry_pass }}" | docker login ${{ secrets.registry_url }} --username "${{ secrets.registry_user }}" --password-stdin
+
+      - name: Build and push image
+        run: |
+          IMG=${{ secrets.registry_url }}/${{ inputs.docker_project }}/${{ inputs.docker_repo }}
+          docker build -t "${{ inputs.docker_repo }}" ./
+          docker tag "${{ inputs.docker_repo }}" "$IMG:${{ inputs.branch }}"
+          docker tag "${{ inputs.docker_repo }}" "$IMG:${{ inputs.branch }}-${{ inputs.run_number }}"
+          docker image push --all-tags "$IMG"
+
+      - name: Git config
+        run: |
+          git config --global user.name "${{ secrets.git_user }}"
+          git config --global user.email "${{ secrets.git_email }}"
+
+      - name: Checkout infra repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: extenship/extenship-infrastructure
+          ref: master
+          path: infra
+          ssh-key: ${{ secrets.infra_secret }}
+
+      - name: Update deployment image tag in infra repo
+        run: |
+          cd infra/hetzner/clusters/easyparser-ccm/projects/${{ inputs.docker_repo }}
+          sed -i "s|${{ inputs.docker_project }}/${{ inputs.docker_repo }}:.*|${{ inputs.docker_project }}/${{ inputs.docker_repo }}:${{ inputs.branch }}-${{ inputs.run_number }}|g" ${{ inputs.docker_repo }}-${{ inputs.branch }}-deployment.yaml
+
+      - name: Git commit
+        run: |
+          cd infra
+          git add .
+          git diff --cached --quiet || git commit -m "${{ inputs.docker_repo }}:${{ inputs.branch }} updated to version:${{ inputs.run_number }} [skip ci]"
+
+      - name: Safe push
+        uses: ./infra/.github/actions/github-action-safe-push
+        with:
+          branch: master
+          directory: infra
+          retries: 3
+          sleep: 5

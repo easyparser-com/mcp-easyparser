@@ -1,0 +1,25 @@
+name: EasyParser - MCP
+
+concurrency: ${{ github.ref_name }}
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  Deploy:
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      env: ${{ github.ref_name }}
+      docker_project: easyparser
+      docker_repo: easyparser-mcp
+      branch: ${{ github.ref_name }}
+      run_number: ${{ github.run_number }}
+    secrets:
+      registry_url: ${{ secrets.REGISTRY_URL }}
+      registry_user: ${{ secrets.REGISTRY_USER }}
+      registry_pass: ${{ secrets.REGISTRY_PASS }}
+      infra_secret: ${{ secrets.INFRA_SECRET }}
+      git_user: ${{ secrets.GIT_USER }}
+      git_email: ${{ secrets.GIT_EMAIL }}
