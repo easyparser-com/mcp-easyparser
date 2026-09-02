@@ -77,18 +77,16 @@ Sign up at [app.easyparser.com/signup](https://app.easyparser.com/signup) — fr
 
 ## Setup
 
-### Remote server (hosted — no install)
+Two ways to connect: the **hosted remote server** (no install, always up to date) or **local via npx** (runs on your machine).
 
-Connect directly to the hosted Streamable HTTP endpoint:
+### Cursor
 
-**Claude Code**
+One-click install (opens Cursor with the configuration pre-filled — replace `YOUR_API_KEY` when prompted):
 
-```bash
-claude mcp add --scope user --transport http easyparser https://mcp.easyparser.com/mcp \
-  --header "Authorization: Bearer YOUR_API_KEY"
-```
+- **Remote server:** [Add to Cursor](cursor://anysphere.cursor-deeplink/mcp/install?name=easyparser&config=eyJ1cmwiOiJodHRwczovL21jcC5lYXN5cGFyc2VyLmNvbS9tY3AiLCJoZWFkZXJzIjp7IkF1dGhvcml6YXRpb24iOiJCZWFyZXIgWU9VUl9BUElfS0VZIn19)
+- **Local (npx):** [Add to Cursor](cursor://anysphere.cursor-deeplink/mcp/install?name=easyparser&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImVhc3lwYXJzZXItbWNwIl0sImVudiI6eyJFQVNZUEFSU0VSX0FQSV9LRVkiOiJZT1VSX0FQSV9LRVkifX0%3D)
 
-**Any client that reads `.mcp.json`**
+Or add manually to `.cursor/mcp.json`:
 
 ```json
 {
@@ -102,52 +100,41 @@ claude mcp add --scope user --transport http easyparser https://mcp.easyparser.c
 }
 ```
 
-`x-api-key: YOUR_API_KEY` works as an alternative header. The `list_operations` discovery tool works without a key, so agents can explore before signing up.
+### VS Code
 
-### Local (stdio via npx)
+One-click install (VS Code asks for your API key securely via an input prompt):
 
-**Claude Code**
+- **Remote server:** [Add to VS Code](vscode:mcp/install?%7B%22name%22%3A%22easyparser%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A//mcp.easyparser.com/mcp%22%2C%22headers%22%3A%7B%22Authorization%22%3A%22Bearer%20%24%7Binput%3Aeasyparser-api-key%7D%22%7D%7D)
 
-```bash
-claude mcp add --scope user easyparser -- npx -y easyparser-mcp
-claude mcp add-env easyparser EASYPARSER_API_KEY YOUR_API_KEY
-```
-
-**Claude Desktop** — add to `claude_desktop_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "easyparser": {
-      "command": "npx",
-      "args": ["-y", "easyparser-mcp"],
-      "env": { "EASYPARSER_API_KEY": "YOUR_API_KEY" }
-    }
-  }
-}
-```
-
-**Cursor** — add to `.cursor/mcp.json`:
-
-```json
-{
-  "mcpServers": {
-    "easyparser": {
-      "command": "npx",
-      "args": ["-y", "easyparser-mcp"],
-      "env": { "EASYPARSER_API_KEY": "YOUR_API_KEY" }
-    }
-  }
-}
-```
-
-**VS Code** — add to `.vscode/mcp.json`:
+Or add manually to `.vscode/mcp.json`:
 
 ```json
 {
   "servers": {
     "easyparser": {
-      "type": "stdio",
+      "type": "http",
+      "url": "https://mcp.easyparser.com/mcp",
+      "headers": { "Authorization": "Bearer YOUR_API_KEY" }
+    }
+  }
+}
+```
+
+### Claude Code
+
+```bash
+claude mcp add --scope user --transport http easyparser https://mcp.easyparser.com/mcp \
+  --header "Authorization: Bearer YOUR_API_KEY"
+```
+
+### Claude Desktop
+
+Add to `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "easyparser": {
       "command": "npx",
       "args": ["-y", "easyparser-mcp"],
       "env": { "EASYPARSER_API_KEY": "YOUR_API_KEY" }
@@ -156,7 +143,21 @@ claude mcp add-env easyparser EASYPARSER_API_KEY YOUR_API_KEY
 }
 ```
 
-**Windsurf** — same stdio pattern in your Windsurf MCP configuration.
+### Manus
+
+Go to **Settings → Integrations → Custom MCP Servers → Add Server**:
+
+| Field | Value |
+|---|---|
+| Server name | `Easyparser` |
+| Server URL | `https://mcp.easyparser.com/mcp` |
+| Authentication | Bearer token: your Easyparser API key |
+
+### Any MCP client
+
+The hosted endpoint speaks [Streamable HTTP](https://modelcontextprotocol.io/specification/2025-06-18/basic/transports#streamable-http) at `https://mcp.easyparser.com/mcp`. Authenticate with `Authorization: Bearer YOUR_API_KEY` — `x-api-key` and `api-key` headers work too. The `list_operations` discovery tool works without a key, so agents can explore before signing up.
+
+For local stdio clients, run `npx -y easyparser-mcp` with `EASYPARSER_API_KEY` set in the environment.
 
 ## Example prompts
 
