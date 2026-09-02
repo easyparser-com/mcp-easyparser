@@ -142,10 +142,10 @@ Each page costs 1 credit. One page typically returns 20-40 products, which is en
         ),
       domain: domainSchema,
       sort_by: z
-        .enum(["featured", "price-asc-rank", "price-desc-rank", "review-rank", "date-desc-rank"])
+        .enum(["featured", "price-asc-rank", "price-desc-rank", "review-rank", "date-desc-rank", "exact-aware-popularity-rank"])
         .default("featured")
         .describe(
-          "Result ordering. 'featured' is Amazon's default; 'price-asc-rank' cheapest first; 'price-desc-rank' most expensive; 'review-rank' most reviewed; 'date-desc-rank' newest listings.",
+          "Result ordering. 'featured' is Amazon's default; 'price-asc-rank' cheapest first; 'price-desc-rank' most expensive; 'review-rank' most reviewed; 'date-desc-rank' newest listings; 'exact-aware-popularity-rank' by popularity.",
         ),
       exclude_sponsored: z
         .boolean()

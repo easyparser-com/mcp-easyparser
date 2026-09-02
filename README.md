@@ -8,9 +8,10 @@
   </picture>
   <br><br>
 </div>
+
 The official **Easyparser MCP server** — give your AI agent real-time, structured Amazon data across 21 marketplaces through the [Model Context Protocol](https://modelcontextprotocol.io).
 
-Product details, seller offers, search results, 12-month sales history, Best Sellers Rank, package dimensions, seller legal identities, catalogs, and feedback — 10 operations, one connection.
+Product details, seller offers, search results, 12-month sales history, Best Sellers Rank, package dimensions, seller legal identities, catalogs, and feedback — 10 data operations plus bulk-job monitoring and account tools, one connection.
 
 ## What your agent can do
 
