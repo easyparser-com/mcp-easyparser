@@ -5,7 +5,7 @@
  */
 import { spawn } from "node:child_process";
 
-const PORT = 3941;
+const PORT = 3951;
 const BASE = `http://127.0.0.1:${PORT}`;
 let passed = 0;
 let failed = 0;
@@ -16,8 +16,13 @@ function check(name, cond, detail = "") {
 }
 
 async function startServer(env = {}) {
+  // Strip ambient API keys so unauthenticated requests are truly keyless;
+  // otherwise the server's env-var fallback makes every request authenticated.
+  const clean = { ...process.env };
+  delete clean.EASYPARSER_API_KEY;
+  delete clean.api_key;
   const proc = spawn("node", ["dist/http.js"], {
-    env: { ...process.env, PORT: String(PORT), ...env },
+    env: { ...clean, PORT: String(PORT), ...env },
     stdio: "pipe",
   });
   await new Promise((r) => setTimeout(r, 1500));

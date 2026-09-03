@@ -61,6 +61,15 @@ Product details, seller offers, search results, 12-month sales history, Best Sel
 </tbody>
 </table>
 
+**Error logs**: the same data as the [Errors page](https://app.easyparser.com/errors) in the web app
+
+<table>
+<thead><tr><th width="220">Tool</th><th>What it returns</th><th width="260">Cost</th></tr></thead>
+<tbody>
+<tr><td><code>get_error_logs</code></td><td>API request errors (real-time and bulk): error code, channel, operation, the failing request params, timestamp</td><td>Free</td></tr>
+</tbody>
+</table>
+
 **Account & discovery**
 
 <table>

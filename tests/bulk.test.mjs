@@ -34,8 +34,8 @@ try {
 
   const { tools } = await client.listTools();
   const names = tools.map((t) => t.name);
-  check("16 tools registered", tools.length === 16, `got ${tools.length}`);
-  for (const t of ["list_bulk_jobs", "get_bulk_job_items", "get_bulk_webhook_logs", "get_bulk_item_result"]) {
+  check("17 tools registered", tools.length === 17, `got ${tools.length}`);
+  for (const t of ["list_bulk_jobs", "get_bulk_job_items", "get_bulk_webhook_logs", "get_bulk_item_result", "get_error_logs"]) {
     check(`tool present: ${t}`, names.includes(t));
   }
 
@@ -128,6 +128,34 @@ try {
     logs.isError ? logs.content[0].text.slice(0, 150) : "",
   );
   console.log(`      webhook logs total: ${logsData.meta_data?.total ?? 0}`);
+
+  // get_error_logs (Account Service)
+  const errs = await client.callTool({
+    name: "get_error_logs",
+    arguments: { page: 1, limit: 5 },
+  });
+  const errsData = parse(errs);
+  check(
+    "get_error_logs returns rows",
+    errs.isError !== true && errsData.success === true && Array.isArray(errsData.data),
+    errs.isError ? errs.content[0].text.slice(0, 150) : "",
+  );
+  console.log(`      error logs total: ${errsData.meta_data?.total_count ?? 0}`);
+  const firstErr = errsData.data?.[0];
+  check(
+    "error row has expected fields",
+    !!firstErr?.error_code && !!firstErr?.error_channel && !!firstErr?.operation,
+  );
+  // channel filter
+  const rtErrs = await client.callTool({
+    name: "get_error_logs",
+    arguments: { page: 1, limit: 3, error_channel: "REALTIME" },
+  });
+  const rtData = parse(rtErrs);
+  check(
+    "get_error_logs REALTIME filter works",
+    rtData.success === true && (rtData.data ?? []).every((e) => e.error_channel === "REALTIME"),
+  );
 } catch (err) {
   console.error("FATAL", err);
   failures++;

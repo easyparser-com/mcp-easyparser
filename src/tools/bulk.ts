@@ -8,6 +8,7 @@ import { z } from "zod";
 import { SUPPORTED_DOMAINS } from "../schemas/common.js";
 
 export const DATA_SERVICE_BASE_URL = "https://data.easyparser.com/v1";
+export const ACCOUNT_SERVICE_BASE_URL = "https://account.easyparser.com/v1";
 
 export const BULK_OPERATIONS = [
   "DETAIL", "OFFER", "SEARCH", "PRODUCT_LOOKUP", "SALES_ANALYSIS_HISTORY",
@@ -26,8 +27,8 @@ export const BULK_ITEM_STATUSES = [
 const paginationFields = {
   page: z.number().int().min(1).default(1).describe("Page number. Default 1."),
   limit: z
-    .number().int().min(1).max(50).default(25)
-    .describe("Items per page (max 50). Default 25 — keep it small to save context."),
+    .number().int().min(1).max(1000).default(100)
+    .describe("Items per page (max 1000). Default 100."),
   sort_direction: z
     .enum(["asc", "desc"]).default("desc")
     .describe("Sort by creation time. 'desc' (newest first) is default."),
@@ -113,6 +114,77 @@ IMPORTANT: bulk results are retained for 24 HOURS after the job completes, then 
 export const GET_BULK_WEBHOOK_LOGS_DESCRIPTION = `Check webhook delivery logs for bulk jobs: whether the completion notification was delivered to the user's callback_url, delivery status, and timestamps. Use this when a job shows as completed but the user's system never received the webhook — the classic "job finished but my integration didn't fire" debugging case.
 
 Scope to one job with group_id (from list_bulk_jobs), or omit it to scan recent deliveries across all jobs. This tool is free of per-call credits.`;
+
+export const getErrorLogsSchema = z.object({
+  error_channel: z
+    .enum(["BULK", "REALTIME"])
+    .optional()
+    .describe("Filter by channel: BULK (bulk job errors) or REALTIME (real-time API errors). Omit for both."),
+  error_code: z
+    .string().optional()
+    .describe("Filter by a specific error code, e.g. 'WEBHOOK_ERROR_404' or 'SOMETHING_WENT_WRONG'."),
+  operation: z
+    .enum(BULK_OPERATIONS).optional()
+    .describe("Filter by operation type, e.g. DETAIL or SEARCH."),
+  domain: z
+    .enum(SUPPORTED_DOMAINS).optional()
+    .describe("Filter by marketplace domain."),
+  platform: z.string().optional().describe("Filter by platform (e.g. 'AMZ')."),
+  date_from: z.string().optional().describe("ISO date lower bound, e.g. 2026-08-01."),
+  date_to: z.string().optional().describe("ISO date upper bound."),
+  order_by: z
+    .enum(["create_date", "error_channel", "error_code", "platform", "domain", "operation"])
+    .default("create_date")
+    .describe("Sort field. Default 'create_date'."),
+  order_type: z
+    .enum(["asc", "desc"]).default("desc")
+    .describe("Sort direction. 'desc' (newest first) is default."),
+  page: z.number().int().min(1).default(1).describe("Page number. Default 1."),
+  limit: z
+    .number().int().min(1).max(1000).default(100)
+    .describe("Items per page (max 1000). Default 100."),
+});
+
+export const GET_ERROR_LOGS_DESCRIPTION = `List the user's API request error logs — the same data shown on the Errors page of the Easyparser web app. Covers both real-time API errors and bulk job errors: each row has the platform, operation, domain, error code, channel (BULK/REALTIME), the request parameters that caused it, and a timestamp.
+
+Use this tool when the user asks about failures: "why are my requests failing?", "show me recent errors", "any webhook errors today?", "what went wrong with my DETAIL calls?". Filter by error_channel (BULK or REALTIME), error_code, operation, or domain to narrow down. Each row includes a request_id and the query_params that triggered the error, so you can trace exactly which input failed.
+
+This tool is free of per-call credits (monitoring endpoints do not consume credits).`;
+
+/** Shared fetch helper for Account Service endpoints (error-logs). Uses Api-Key header. */
+export async function callAccountService(
+  apiKey: string,
+  path: string,
+  params: Record<string, string | number | undefined>,
+): Promise<unknown> {
+  const url = new URL(`${ACCOUNT_SERVICE_BASE_URL}${path}`);
+  for (const [k, v] of Object.entries(params)) {
+    if (v !== undefined && v !== null && v !== "") url.searchParams.set(k, String(v));
+  }
+  let response: Response;
+  try {
+    response = await fetch(url.toString(), {
+      headers: { "Api-Key": apiKey, Accept: "application/json" },
+      signal: AbortSignal.timeout(60_000),
+    });
+  } catch (err) {
+    throw new Error(
+      `Could not reach the Easyparser Account Service: ${err instanceof Error ? err.message : String(err)}. Retry once.`,
+    );
+  }
+  if (response.status === 401 || response.status === 403) {
+    throw new Error(
+      "Easyparser API key is missing or invalid. Ask the user to create a free key at https://app.easyparser.com/signup and set EASYPARSER_API_KEY.",
+    );
+  }
+  const body = (await response.json().catch(() => null)) as Record<string, unknown> | null;
+  if (!response.ok || !body) {
+    throw new Error(
+      `Account Service request failed (HTTP ${response.status}). Retry once; if it persists, tell the user.`,
+    );
+  }
+  return body;
+}
 
 /** Shared fetch helper for Data Service monitoring endpoints. */
 export async function callDataService(

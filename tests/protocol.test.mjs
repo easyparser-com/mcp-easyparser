@@ -37,7 +37,7 @@ try {
     "get_seller_feedback", "get_seller_products", "get_seller_profile",
     "list_operations", "lookup_product", "search_products",
   ];
-  check("16 tools registered", tools.length === 16, `got ${tools.length}`);
+  check("17 tools registered", tools.length === 17, `got ${tools.length}`);
   for (const e of expected) check(`tool present: ${e}`, names.includes(e));
 
   // 2. Annotations

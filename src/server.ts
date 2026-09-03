@@ -7,14 +7,17 @@ import { z } from "zod";
 import { callAccountApi } from "./account.js";
 import { callEasyparser, EasyparserApiError } from "./client.js";
 import {
+  callAccountService,
   callDataService,
   callItemResult,
   GET_BULK_ITEM_RESULT_DESCRIPTION,
   GET_BULK_JOB_ITEMS_DESCRIPTION,
   GET_BULK_WEBHOOK_LOGS_DESCRIPTION,
+  GET_ERROR_LOGS_DESCRIPTION,
   getBulkItemResultSchema,
   getBulkJobItemsSchema,
   getBulkWebhookLogsSchema,
+  getErrorLogsSchema,
   LIST_BULK_JOBS_DESCRIPTION,
   listBulkJobsSchema,
 } from "./tools/bulk.js";
@@ -83,7 +86,7 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
   const server = new McpServer(
     {
       name: "easyparser-mcp",
-      version: "1.3.1",
+      version: "1.4.0",
     },
     {
       instructions: SERVER_INSTRUCTIONS,
@@ -245,6 +248,37 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
           request_id: input.request_id,
           date_from: input.date_from,
           date_to: input.date_to,
+        });
+        return textResult(body);
+      } catch (err) {
+        return errorResult(err instanceof Error ? err.message : String(err));
+      }
+    },
+  );
+
+  // Error logs: get_error_logs (API key required)
+  server.registerTool(
+    "get_error_logs",
+    {
+      description: GET_ERROR_LOGS_DESCRIPTION,
+      inputSchema: getErrorLogsSchema,
+      annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
+    },
+    async (input) => {
+      try {
+        const apiKey = requireApiKey(ctx);
+        const body = await callAccountService(apiKey, "/error-logs", {
+          page: input.page,
+          limit: input.limit,
+          error_channel: input.error_channel,
+          error_code: input.error_code,
+          operation: input.operation,
+          domain: input.domain,
+          platform: input.platform,
+          date_from: input.date_from,
+          date_to: input.date_to,
+          order_by: input.order_by,
+          order_type: input.order_type,
         });
         return textResult(body);
       } catch (err) {
