@@ -71,6 +71,20 @@ const dataEnvelopeOutputSchema = {
   request_id: z.string().optional().describe("Easyparser request ID, useful for support and error logs."),
 };
 
+/** Data Service / Account responses: pass the JSON object through as-is. */
+const passthroughOutputSchema = z
+  .object({})
+  .passthrough()
+  .describe("JSON response from the Easyparser Data Service or Account API. Non-object payloads are wrapped as { result }.");
+
+function passthroughResult(payload: unknown) {
+  const structured =
+    payload !== null && typeof payload === "object" && !Array.isArray(payload)
+      ? payload
+      : { result: payload };
+  return { ...textResult(payload), structuredContent: structured as Record<string, unknown> };
+}
+
 const operationsCatalogOutputSchema = {
   server: z.string(),
   operations: z.array(
@@ -193,6 +207,7 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
     {
       description: LIST_BULK_JOBS_DESCRIPTION,
       inputSchema: listBulkJobsSchema,
+      outputSchema: passthroughOutputSchema,
       annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
     },
     async (input) => {
@@ -207,7 +222,7 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
           domain: input.domain,
           bulk_request_id: input.bulk_request_id,
         });
-        return textResult(body);
+        return passthroughResult(body);
       } catch (err) {
         return errorResult(err instanceof Error ? err.message : String(err));
       }
@@ -220,6 +235,7 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
     {
       description: GET_BULK_JOB_ITEMS_DESCRIPTION,
       inputSchema: getBulkJobItemsSchema,
+      outputSchema: passthroughOutputSchema,
       annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
     },
     async (input) => {
@@ -238,7 +254,7 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
             date_to: input.date_to,
           },
         );
-        return textResult(body);
+        return passthroughResult(body);
       } catch (err) {
         return errorResult(err instanceof Error ? err.message : String(err));
       }
@@ -251,13 +267,14 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
     {
       description: GET_BULK_ITEM_RESULT_DESCRIPTION,
       inputSchema: getBulkItemResultSchema,
+      outputSchema: passthroughOutputSchema,
       annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
     },
     async (input) => {
       try {
         const apiKey = requireApiKey(ctx);
         const body = await callItemResult(apiKey, input.item_id);
-        return textResult(body);
+        return passthroughResult(body);
       } catch (err) {
         return errorResult(err instanceof Error ? err.message : String(err));
       }
@@ -270,6 +287,7 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
     {
       description: GET_BULK_WEBHOOK_LOGS_DESCRIPTION,
       inputSchema: getBulkWebhookLogsSchema,
+      outputSchema: passthroughOutputSchema,
       annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
     },
     async (input) => {
@@ -286,7 +304,7 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
           date_from: input.date_from,
           date_to: input.date_to,
         });
-        return textResult(body);
+        return passthroughResult(body);
       } catch (err) {
         return errorResult(err instanceof Error ? err.message : String(err));
       }
@@ -299,6 +317,7 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
     {
       description: GET_ERROR_LOGS_DESCRIPTION,
       inputSchema: getErrorLogsSchema,
+      outputSchema: passthroughOutputSchema,
       annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
     },
     async (input) => {
@@ -317,7 +336,7 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
           order_by: input.order_by,
           order_type: input.order_type,
         });
-        return textResult(body);
+        return passthroughResult(body);
       } catch (err) {
         return errorResult(err instanceof Error ? err.message : String(err));
       }
@@ -330,6 +349,7 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
     {
       description: CHECK_CREDITS_DESCRIPTION,
       inputSchema: checkCreditsSchema,
+      outputSchema: passthroughOutputSchema,
       annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
     },
     async () => {
@@ -337,7 +357,7 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
         const apiKey = requireApiKey(ctx);
         // Account API: free of per-call credits, returns plan + balance + usage.
         const info = await callAccountApi(apiKey);
-        return textResult({
+        return structuredResult({
           ...info,
           note: "This check is free (Account API consumes no credits). Plan management: https://app.easyparser.com/account/plan",
         });

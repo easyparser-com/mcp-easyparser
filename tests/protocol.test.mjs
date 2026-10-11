@@ -55,6 +55,7 @@ try {
   check("list_operations returns domains", Array.isArray(catalog.supported_domains) && catalog.supported_domains.length === 21);
   check("list_operations not flagged as error", catResult.isError !== true);
   check("list_operations returns structuredContent", catResult.structuredContent?.operations?.length === 10);
+  check("all tools declare outputSchema", tools.every((t) => t.outputSchema), tools.filter((t) => !t.outputSchema).map((t) => t.name).join(","));
   check("data tools declare outputSchema", detail?.outputSchema?.properties?.credits_remaining !== undefined);
 
   // 3b. Prompts and resources
