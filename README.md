@@ -7,6 +7,8 @@
     <img alt="Easyparser" src="https://easyparser.com/assets/svg/logos/logo.svg" width="260">
   </picture>
   <br><br>
+  <a href="https://smithery.ai/servers/easyparser/easyparser"><img alt="smithery badge" src="https://smithery.ai/badge/easyparser/easyparser"></a>
+  <br><br>
 </div>
 
 The official **Easyparser MCP server**: give your AI agent real-time, structured Amazon data across 21 marketplaces through the [Model Context Protocol](https://modelcontextprotocol.io).
@@ -190,6 +192,26 @@ amazon.de: prices, ratings, and which ones are Prime.
 Is the bulk job I started this morning finished? If any items failed,
 tell me which ASINs and why.
 ```
+
+## Built-in prompts and resources
+
+Clients that support MCP prompts can start these workflows in one step:
+
+| Prompt | What it does |
+|---|---|
+| `analyze_competitor_product` | Listing details, seller offers and 3-month sales and BSR trends for one ASIN |
+| `estimate_fba_logistics` | Exact package dimensions, weight and fee category for FBA planning |
+| `match_barcodes_to_asins` | Converts a list of UPC, EAN, GTIN or ISBN codes into ASINs |
+| `vet_amazon_seller` | Legal identity, reputation trend and negative feedback for a seller |
+| `product_market_research` | Top organic results and demand comparison for a keyword niche |
+
+Read-only resources, free and available without a key:
+
+- `easyparser://operations`: every operation with its credit cost
+- `easyparser://marketplaces`: the 21 supported Amazon domains
+- `easyparser://guide`: decision rules for picking tools and saving credits
+
+Data tools also return `structuredContent` matching their declared `outputSchema`.
 
 ## Self-hosting the HTTP server
 

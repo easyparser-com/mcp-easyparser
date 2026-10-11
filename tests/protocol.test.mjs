@@ -54,6 +54,18 @@ try {
   check("list_operations returns 10 operations", catalog.operations?.length === 10);
   check("list_operations returns domains", Array.isArray(catalog.supported_domains) && catalog.supported_domains.length === 21);
   check("list_operations not flagged as error", catResult.isError !== true);
+  check("list_operations returns structuredContent", catResult.structuredContent?.operations?.length === 10);
+  check("data tools declare outputSchema", detail?.outputSchema?.properties?.credits_remaining !== undefined);
+
+  // 3b. Prompts and resources
+  const { prompts } = await client.listPrompts();
+  check("5 prompts registered", prompts.length === 5, `got ${prompts.length}`);
+  const prompt = await client.getPrompt({ name: "analyze_competitor_product", arguments: { asin: "B0CJB6V2L5" } });
+  check("prompt renders with asin", /B0CJB6V2L5/.test(prompt.messages[0].content.text));
+  const { resources } = await client.listResources();
+  check("3 resources registered", resources.length === 3, `got ${resources.length}`);
+  const markets = await client.readResource({ uri: "easyparser://marketplaces" });
+  check("marketplaces resource lists 21 domains", JSON.parse(markets.contents[0].text).count === 21);
 
   // 4. Mutex validation (asin + url together must fail gracefully)
   const mutexResult = await client.callTool({

@@ -21,6 +21,7 @@ import {
   LIST_BULK_JOBS_DESCRIPTION,
   listBulkJobsSchema,
 } from "./tools/bulk.js";
+import { registerPrompts, registerResources } from "./prompts.js";
 import { TOOL_DEFINITIONS } from "./tools/definitions.js";
 import {
   buildOperationsCatalogResponse,
@@ -51,6 +52,40 @@ function textResult(payload: unknown) {
     content: [{ type: "text" as const, text: JSON.stringify(payload, null, 2) }],
   };
 }
+
+/** Text plus structured copy, for tools that declare an outputSchema. */
+function structuredResult(payload: object) {
+  return {
+    ...textResult(payload),
+    structuredContent: payload as Record<string, unknown>,
+  };
+}
+
+/** Envelope returned by every Real-Time API data tool (see EasyparserEnvelope). */
+const dataEnvelopeOutputSchema = {
+  success: z.boolean().describe("True when the request completed."),
+  operation: z.string().describe("Easyparser operation that ran, e.g. DETAIL or OFFER."),
+  data: z.unknown().describe("Parsed Amazon data for the operation."),
+  credits_used: z.number().optional().describe("Credits charged for this request."),
+  credits_remaining: z.number().optional().describe("Credits left on the account after this request."),
+  request_id: z.string().optional().describe("Easyparser request ID, useful for support and error logs."),
+};
+
+const operationsCatalogOutputSchema = {
+  server: z.string(),
+  operations: z.array(
+    z.object({
+      operation: z.string(),
+      tool: z.string(),
+      cost: z.string(),
+      input: z.string(),
+      use_case: z.string(),
+    }),
+  ),
+  supported_domains: z.array(z.string()),
+  signup: z.string(),
+  note: z.string(),
+};
 
 function errorResult(message: string) {
   return {
@@ -99,6 +134,7 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
       {
         description: def.description,
         inputSchema: def.schema,
+        outputSchema: dataEnvelopeOutputSchema,
         annotations: {
           readOnlyHint: true,
           destructiveHint: false,
@@ -124,7 +160,7 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
           const apiKey = requireApiKey(ctx);
           const params = def.toApiParams(input as Record<string, unknown>);
           const result = await callEasyparser(apiKey, params);
-          return textResult(result);
+          return structuredResult(result);
         } catch (err) {
           if (err instanceof EasyparserApiError) {
             return errorResult(err.message);
@@ -143,10 +179,11 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
     {
       description: LIST_OPERATIONS_DESCRIPTION,
       inputSchema: listOperationsSchema,
+      outputSchema: operationsCatalogOutputSchema,
       annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
     },
     async (input) => {
-      return textResult(buildOperationsCatalogResponse(input.operation));
+      return structuredResult(buildOperationsCatalogResponse(input.operation));
     },
   );
 
@@ -312,6 +349,9 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
       }
     },
   );
+
+  registerPrompts(server);
+  registerResources(server, SERVER_INSTRUCTIONS);
 
   return server;
 }
