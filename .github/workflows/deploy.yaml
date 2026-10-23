@@ -48,7 +48,7 @@ jobs:
       - name: Build and push image
         run: |
           IMG=${{ secrets.registry_url }}/${{ inputs.docker_project }}/${{ inputs.docker_repo }}
-          docker build -t "${{ inputs.docker_repo }}" ./
+          docker build --pull -t "${{ inputs.docker_repo }}" ./
           docker tag "${{ inputs.docker_repo }}" "$IMG:${{ inputs.branch }}"
           docker tag "${{ inputs.docker_repo }}" "$IMG:${{ inputs.branch }}-${{ inputs.run_number }}"
           docker image push --all-tags "$IMG"
