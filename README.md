@@ -13,7 +13,7 @@
 
 The official **Easyparser MCP server**: give your AI agent real-time, structured Amazon data across 21 marketplaces through the [Model Context Protocol](https://modelcontextprotocol.io).
 
-Product details, seller offers, search results, 12-month sales history, Best Sellers Rank, package dimensions, seller legal identities, catalogs, and feedback. 10 data operations plus bulk-job monitoring and account tools, one connection.
+Product details, seller offers, search results, 12-month sales history, Best Sellers Rank, package dimensions, similar products, seller legal identities, catalogs, and feedback. 11 data operations plus bulk-job monitoring and account tools, one connection.
 
 ## What your agent can do
 
@@ -26,6 +26,7 @@ Product details, seller offers, search results, 12-month sales history, Best Sel
 <tr><td><code>get_product_offers</code></td><td>Every seller offer: prices, conditions, FBA/FBM, Buy Box winner</td><td>1 credit per page (max 5)</td></tr>
 <tr><td><code>get_bestseller_rank</code></td><td>Current Best Sellers Rank by category</td><td>1 credit</td></tr>
 <tr><td><code>get_package_dimensions</code></td><td>Exact dimensions, weight, Amazon fee category</td><td>1 credit</td></tr>
+<tr><td><code>get_similar_products</code></td><td>Similar and competing products for an ASIN: title, brand, category, image</td><td>1 credit for 10, 6 for 50, 11 for 100</td></tr>
 <tr><td><code>get_sales_history</code></td><td>12-month weekly trends: views, sales, price, BSR</td><td>5 credits + 1 per month of history (max 17)</td></tr>
 </tbody>
 </table>

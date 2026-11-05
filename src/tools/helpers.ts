@@ -57,6 +57,13 @@ export const OPERATIONS_CATALOG = [
     use_case: "Exact dimensions, weight, Amazon fee category — FBA fee estimation",
   },
   {
+    operation: "SIMILAR_PRODUCTS",
+    tool: "get_similar_products",
+    cost: "1 credit for 10 results (default), 6 for 50, 11 for 100",
+    input: "asin + optional similar_limit (10/50/100)",
+    use_case: "Alternative and competitor discovery: related ASINs with title, brand, category, image",
+  },
+  {
     operation: "SELLER_PROFILE",
     tool: "get_seller_profile",
     cost: "1 credit",
@@ -83,7 +90,7 @@ export const listOperationsSchema = z.object({
   operation: z
     .enum([
       "DETAIL", "OFFER", "SEARCH", "PRODUCT_LOOKUP", "SALES_ANALYSIS_HISTORY",
-      "BEST_SELLERS_RANK", "PACKAGE_DIMENSION", "SELLER_PROFILE",
+      "BEST_SELLERS_RANK", "PACKAGE_DIMENSION", "SIMILAR_PRODUCTS", "SELLER_PROFILE",
       "SELLER_PRODUCTS", "SELLER_FEEDBACK",
     ])
     .optional()

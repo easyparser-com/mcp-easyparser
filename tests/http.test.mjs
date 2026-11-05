@@ -42,11 +42,11 @@ try {
   await client.connect(transport);
 
   const { tools } = await client.listTools();
-  check("HTTP: 17 tools listed", tools.length === 17, `got ${tools.length}`);
+  check("HTTP: 18 tools listed", tools.length === 18, `got ${tools.length}`);
 
   const cat = await client.callTool({ name: "list_operations", arguments: {} });
   const catalog = JSON.parse(cat.content[0].text);
-  check("HTTP: list_operations works", catalog.operations?.length === 10);
+  check("HTTP: list_operations works", catalog.operations?.length === 11);
 
   if (KEY) {
     const rank = await client.callTool({

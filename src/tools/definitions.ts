@@ -262,6 +262,31 @@ Use this tool when the question is about shipping, storage, FBA fees, or warehou
     }),
   },
   {
+    name: "get_similar_products",
+    operation: "SIMILAR_PRODUCTS",
+    description: `Find products Amazon considers similar to a given ASIN: returns the source product plus a 'similar' list of related ASINs with title, brand, category and image. This is the competitor and alternative discovery tool.
+
+Use this tool when the user asks for alternatives, competing products, or 'what else is like this?' for a specific ASIN. For keyword-based discovery without a starting product, use search_products instead. To compare the found products in depth, follow up with get_product_detail on the ASINs that matter.
+
+Cost depends on similar_limit: 10 results = 1 credit (default), 50 = 6 credits, 100 = 11 credits. If no similar products are found, only 1 credit is charged. Keep the default 10 unless the user asks for a broad list. Delivery-address localization is not supported for this operation.`,
+    schema: z.object({
+      asin: asinSchema,
+      domain: domainSchema,
+      similar_limit: z
+        .enum(["10", "50", "100"])
+        .default("10")
+        .describe(
+          "Maximum number of similar products to return: '10' (1 credit, default), '50' (6 credits) or '100' (11 credits).",
+        ),
+    }),
+    toApiParams: (i) => ({
+      operation: "SIMILAR_PRODUCTS",
+      domain: i.domain as string,
+      asin: i.asin as string,
+      similar_limit: i.similar_limit as string,
+    }),
+  },
+  {
     name: "get_seller_profile",
     operation: "SELLER_PROFILE",
     description: `Unmask the legal identity and reputation of any Amazon merchant: legal business name, registered business address, and granular feedback trends over 30/90/365 days and lifetime. This is the supplier-verification and brand-protection tool.

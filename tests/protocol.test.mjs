@@ -34,10 +34,10 @@ try {
   const expected = [
     "check_credits", "get_bestseller_rank", "get_package_dimensions",
     "get_product_detail", "get_product_offers", "get_sales_history",
-    "get_seller_feedback", "get_seller_products", "get_seller_profile",
+    "get_seller_feedback", "get_seller_products", "get_seller_profile", "get_similar_products",
     "list_operations", "lookup_product", "search_products",
   ];
-  check("17 tools registered", tools.length === 17, `got ${tools.length}`);
+  check("18 tools registered", tools.length === 18, `got ${tools.length}`);
   for (const e of expected) check(`tool present: ${e}`, names.includes(e));
 
   // 2. Annotations
@@ -51,10 +51,10 @@ try {
   // 3. list_operations without API key
   const catResult = await client.callTool({ name: "list_operations", arguments: {} });
   const catalog = JSON.parse(catResult.content[0].text);
-  check("list_operations returns 10 operations", catalog.operations?.length === 10);
+  check("list_operations returns 11 operations", catalog.operations?.length === 11);
   check("list_operations returns domains", Array.isArray(catalog.supported_domains) && catalog.supported_domains.length === 21);
   check("list_operations not flagged as error", catResult.isError !== true);
-  check("list_operations returns structuredContent", catResult.structuredContent?.operations?.length === 10);
+  check("list_operations returns structuredContent", catResult.structuredContent?.operations?.length === 11);
   check("all tools declare outputSchema", tools.every((t) => t.outputSchema), tools.filter((t) => !t.outputSchema).map((t) => t.name).join(","));
   check("data tools declare outputSchema", detail?.outputSchema?.properties?.credits_remaining !== undefined);
 

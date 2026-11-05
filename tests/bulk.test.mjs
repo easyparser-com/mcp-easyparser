@@ -34,7 +34,7 @@ try {
 
   const { tools } = await client.listTools();
   const names = tools.map((t) => t.name);
-  check("17 tools registered", tools.length === 17, `got ${tools.length}`);
+  check("18 tools registered", tools.length === 18, `got ${tools.length}`);
   for (const t of ["list_bulk_jobs", "get_bulk_job_items", "get_bulk_webhook_logs", "get_bulk_item_result", "get_error_logs"]) {
     check(`tool present: ${t}`, names.includes(t));
   }
