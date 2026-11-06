@@ -11,7 +11,7 @@
   <br><br>
 </div>
 
-The official **Easyparser MCP server**: give your AI agent real-time, structured Amazon data across 21 marketplaces through the [Model Context Protocol](https://modelcontextprotocol.io).
+The official **Easyparser MCP server**: give your AI agent real-time, structured Amazon data across 22 marketplaces through the [Model Context Protocol](https://modelcontextprotocol.io).
 
 Product details, seller offers, search results, 12-month sales history, Best Sellers Rank, package dimensions, similar products, seller legal identities, catalogs, and feedback. 11 data operations plus bulk-job monitoring and account tools, one connection.
 
@@ -209,7 +209,7 @@ Clients that support MCP prompts can start these workflows in one step:
 Read-only resources, free and available without a key:
 
 - `easyparser://operations`: every operation with its credit cost
-- `easyparser://marketplaces`: the 21 supported Amazon domains
+- `easyparser://marketplaces`: the 22 supported Amazon domains
 - `easyparser://guide`: decision rules for picking tools and saving credits
 
 Data tools also return `structuredContent` matching their declared `outputSchema`.

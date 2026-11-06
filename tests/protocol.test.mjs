@@ -52,7 +52,7 @@ try {
   const catResult = await client.callTool({ name: "list_operations", arguments: {} });
   const catalog = JSON.parse(catResult.content[0].text);
   check("list_operations returns 11 operations", catalog.operations?.length === 11);
-  check("list_operations returns domains", Array.isArray(catalog.supported_domains) && catalog.supported_domains.length === 21);
+  check("list_operations returns domains", Array.isArray(catalog.supported_domains) && catalog.supported_domains.length === 22);
   check("list_operations not flagged as error", catResult.isError !== true);
   check("list_operations returns structuredContent", catResult.structuredContent?.operations?.length === 11);
   check("all tools declare outputSchema", tools.every((t) => t.outputSchema), tools.filter((t) => !t.outputSchema).map((t) => t.name).join(","));
@@ -66,7 +66,7 @@ try {
   const { resources } = await client.listResources();
   check("3 resources registered", resources.length === 3, `got ${resources.length}`);
   const markets = await client.readResource({ uri: "easyparser://marketplaces" });
-  check("marketplaces resource lists 21 domains", JSON.parse(markets.contents[0].text).count === 21);
+  check("marketplaces resource lists 22 domains", JSON.parse(markets.contents[0].text).count === 22);
 
   // 4. Mutex validation (asin + url together must fail gracefully)
   const mutexResult = await client.callTool({

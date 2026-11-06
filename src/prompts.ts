@@ -150,7 +150,7 @@ export function registerResources(server: McpServer, guide: string): void {
     "easyparser://marketplaces",
     {
       title: "Supported Amazon marketplaces",
-      description: "The 21 Amazon marketplace domains Easyparser supports, for the domain parameter of every data tool.",
+      description: "The 22 Amazon marketplace domains Easyparser supports, for the domain parameter of every data tool.",
       mimeType: "application/json",
     },
     async (uri) => ({

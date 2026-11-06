@@ -7,7 +7,7 @@ import { z } from "zod";
 export const SUPPORTED_DOMAINS = [
   ".com", ".co.uk", ".de", ".fr", ".it", ".es", ".ca", ".com.mx",
   ".com.br", ".co.jp", ".in", ".com.au", ".ae", ".sa", ".nl", ".pl",
-  ".se", ".com.be", ".com.tr", ".sg", ".ie",
+  ".se", ".com.be", ".com.tr", ".sg", ".ie", ".eg",
 ] as const;
 
 export const domainSchema = z

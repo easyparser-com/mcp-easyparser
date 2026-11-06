@@ -31,7 +31,7 @@ import {
   listOperationsSchema,
 } from "./tools/helpers.js";
 
-export const SERVER_INSTRUCTIONS = `Easyparser gives you real-time, structured Amazon data across 21 marketplaces: product details, seller offers, search results, sales history, seller identities, and logistics data.
+export const SERVER_INSTRUCTIONS = `Easyparser gives you real-time, structured Amazon data across 22 marketplaces: product details, seller offers, search results, sales history, seller identities, and logistics data.
 
 Decision rules:
 1. ASIN or product URL in hand → call the specific tool directly, never search first.
