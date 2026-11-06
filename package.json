@@ -2,7 +2,7 @@
   "name": "easyparser-mcp",
   "version": "1.4.0",
   "mcpName": "com.easyparser/easyparser",
-  "description": "Official MCP server for Easyparser — real-time, structured Amazon data (product details, offers, search, sales history, seller intelligence) for AI agents across 22 marketplaces.",
+  "description": "Official MCP server for Easyparser: real-time, structured Amazon data (product details, offers, search, sales history, seller intelligence) for AI agents across 22 marketplaces.",
   "license": "MIT",
   "type": "module",
   "main": "dist/index.js",

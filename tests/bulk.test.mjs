@@ -98,7 +98,7 @@ try {
       failedData.success === true && (failedData.data ?? []).every((i) => i.status === "failed"),
     );
 
-    // get_bulk_item_result — old items are expired; verify graceful handling either way
+    // get_bulk_item_result: old items are expired, verify graceful handling either way
     if (firstItem?.item_id) {
       const itemResult = await client.callTool({
         name: "get_bulk_item_result",
@@ -116,7 +116,7 @@ try {
     }
   }
 
-  // get_bulk_webhook_logs (may be empty — structure check only)
+  // get_bulk_webhook_logs (may be empty, structure check only)
   const logs = await client.callTool({
     name: "get_bulk_webhook_logs",
     arguments: { page: 1, limit: 5 },

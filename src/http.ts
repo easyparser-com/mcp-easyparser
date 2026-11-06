@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Easyparser MCP server — Streamable HTTP transport.
+ * Easyparser MCP server: Streamable HTTP transport.
  * Remote endpoint for Claude, ChatGPT, Gemini, Cursor and any MCP client
  * that speaks streamable HTTP.
  *
@@ -61,7 +61,7 @@ function extractApiKey(req: IncomingMessage): string | undefined {
 
 /**
  * The 401 discovery contract (MCP authorization spec): when OAuth mode is
- * enabled, every unauthenticated request — initialize included — must
+ * enabled, every unauthenticated request (initialize included) must
  * return 401 with a WWW-Authenticate header pointing at the protected
  * resource metadata. This is how clients like claude.ai discover that the
  * server requires OAuth. Never special-case initialize to return 200.

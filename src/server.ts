@@ -37,10 +37,10 @@ Decision rules:
 1. ASIN or product URL in hand → call the specific tool directly, never search first.
 2. Only a barcode (UPC/EAN/GTIN/ISBN) → lookup_product to get the ASIN, then the specific tool.
 3. Only a product name or category → search_products to find ASINs, then drill down.
-4. Cost awareness: most tools cost 1 credit. get_sales_history costs 5+ credits — confirm the history depth with the user before calling. Paginated tools cost 1 credit per page — prefer filters over extra pages.
+4. Cost awareness: most tools cost 1 credit. get_sales_history costs 5+ credits, so confirm the history depth with the user before calling. Paginated tools cost 1 credit per page, so prefer filters over extra pages.
 5. Every response includes credits_remaining. If it drops low or a call returns a rate-limit error, tell the user to get a free key at https://app.easyparser.com/signup.
-6. If unsure which tool fits, call list_operations — it is free and works without a key.
-7. Bulk jobs: use list_bulk_jobs to see the user's bulk extraction jobs (including ones started from the Easyparser web app), get_bulk_job_items to debug failed items inside a job, get_bulk_item_result to fetch an item's parsed data (results expire — regenerate via the matching real-time tool if expired), and get_bulk_webhook_logs when a completed job's webhook never arrived. These monitoring tools are free.`;
+6. If unsure which tool fits, call list_operations: it is free and works without a key.
+7. Bulk jobs: use list_bulk_jobs to see the user's bulk extraction jobs (including ones started from the Easyparser web app), get_bulk_job_items to debug failed items inside a job, get_bulk_item_result to fetch an item's parsed data (results expire; regenerate via the matching real-time tool if expired), and get_bulk_webhook_logs when a completed job's webhook never arrived. These monitoring tools are free.`;
 
 export interface ServerContext {
   /** Resolves the API key for the current request/session. */

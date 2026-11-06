@@ -14,14 +14,14 @@ export const domainSchema = z
   .enum(SUPPORTED_DOMAINS)
   .default(".com")
   .describe(
-    "Amazon marketplace domain extension. Determines the regional Amazon site the data is fetched from. Use the domain that matches the user's market — prices, availability and rankings differ across marketplaces.",
+    "Amazon marketplace domain extension. Determines the regional Amazon site the data is fetched from. Use the domain that matches the user's market, because prices, availability and rankings differ across marketplaces.",
   );
 
 export const asinSchema = z
   .string()
   .regex(/^[A-Z0-9]{10}$/i, "ASIN must be a 10-character alphanumeric code")
   .describe(
-    "Amazon Standard Identification Number — a 10-character alphanumeric product identifier (e.g. B0CJB6V2L5). Found in the product URL after /dp/ or /gp/product/.",
+    "Amazon Standard Identification Number, a 10-character alphanumeric product identifier (e.g. B0CJB6V2L5). Found in the product URL after /dp/ or /gp/product/.",
   );
 
 export const productUrlSchema = z

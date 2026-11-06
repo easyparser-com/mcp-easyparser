@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Easyparser MCP server — stdio transport.
+ * Easyparser MCP server: stdio transport.
  * Used by Claude Desktop, Cursor, VS Code, Windsurf via npx.
  *
  * Config: EASYPARSER_API_KEY environment variable.

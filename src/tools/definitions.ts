@@ -30,7 +30,7 @@ export interface ToolDefinition {
 }
 
 const IDENTIFIER_MUTEX_HINT =
-  "Provide EITHER the identifier field OR url — never both.";
+  "Provide EITHER the identifier field OR url, never both.";
 
 export const TOOL_DEFINITIONS: ToolDefinition[] = [
   {
@@ -78,7 +78,7 @@ ${IDENTIFIER_MUTEX_HINT} Costs 1 credit; set a_plus_content to true only when th
 
 Use this tool when the question is about WHO sells the product and at WHAT price. If you need the product's own details (title, images, rating), use get_product_detail instead.
 
-Each requested page costs 1 credit. Start with a single page (default) and only increase max_page if the user needs the full offer list. Use the condition and shipping filters to narrow results instead of paginating — it is cheaper.`,
+Each requested page costs 1 credit. Start with a single page (default) and only increase max_page if the user needs the full offer list. Use the condition and shipping filters to narrow results instead of paginating; it is cheaper.`,
     schema: z.object({
       asin: asinSchema,
       domain: domainSchema,
@@ -123,7 +123,7 @@ Each requested page costs 1 credit. Start with a single page (default) and only 
     operation: "SEARCH",
     description: `Search Amazon by keyword or a full search/category URL and get structured product listings: ASIN, title, price, rating, review count, Prime status, and badges (Best Seller, Amazon's Choice) for each result. Also returns the available refinement filters (category, brand, price range) with their IDs.
 
-Use this tool for market research, keyword analysis, and product discovery. If the user already has an ASIN or product URL, do NOT search — use get_product_detail directly.
+Use this tool for market research, keyword analysis, and product discovery. If the user already has an ASIN or product URL, do NOT search; use get_product_detail directly.
 
 Each page costs 1 credit. One page typically returns 20-40 products, which is enough for most questions. Use sort_by and exclude_sponsored to improve result quality instead of fetching more pages. To filter by category or brand, first run one search and read the refinements field in the response to discover valid filter IDs, then pass them in refinements.`,
     schema: z.object({
@@ -185,7 +185,7 @@ Each page costs 1 credit. One page typically returns 20-40 products, which is en
 
 Use this tool when the user has a barcode or standard product code and wants to find the matching Amazon listing. Typical workflows: catalog matching, inventory synchronization, converting supplier data into Amazon ASINs. Also accepts ASIN as input type if you need to validate one.
 
-You MUST set identifier_type to match the code you have — guessing the wrong type returns no results. UPC is 12 digits, EAN/GTIN is 13, ISBN is 10 or 13 (books). If the user gives a keyword instead of a code, use search_products instead. Costs 1 credit.`,
+You MUST set identifier_type to match the code you have. Guessing the wrong type returns no results. UPC is 12 digits, EAN/GTIN is 13, ISBN is 10 or 13 (books). If the user gives a keyword instead of a code, use search_products instead. Costs 1 credit.`,
     schema: z.object({
       identifier: z
         .string()
@@ -207,9 +207,9 @@ You MUST set identifier_type to match the code you have — guessing the wrong t
   {
     name: "get_sales_history",
     operation: "SALES_ANALYSIS_HISTORY",
-    description: `Retrieve a product's historical performance over up to 12 months: weekly aggregated trends for estimated views/traffic, sales, price, and Best Sellers Rank. This is Easyparser's 'time machine' — the deepest competitive-intelligence tool in this server.
+    description: `Retrieve a product's historical performance over up to 12 months: weekly aggregated trends for estimated views/traffic, sales, price, and Best Sellers Rank. This is Easyparser's 'time machine', the deepest competitive-intelligence tool in this server.
 
-Use this tool for trend forecasting, seasonality analysis, conversion-rate estimation, and investment/sourcing due diligence. Do NOT use it for a simple current price check — get_product_detail is 5x cheaper for that.
+Use this tool for trend forecasting, seasonality analysis, conversion-rate estimation, and investment/sourcing due diligence. Do NOT use it for a simple current price check; get_product_detail is 5x cheaper for that.
 
 IMPORTANT cost rule: the base cost is 5 credits, and each month of history adds 1 credit (3 months = 8 credits, 12 months = 17 credits). Always ask the user how far back they need, or default to 3 months for a quick trend read. The history array in the response is aggregated by WEEK, not by day.`,
     schema: z.object({
@@ -234,7 +234,7 @@ IMPORTANT cost rule: the base cost is 5 credits, and each month of history adds 
     operation: "BEST_SELLERS_RANK",
     description: `Get a product's current Best Sellers Rank (BSR): its numerical rank in main categories and sub-category node identifiers. A lightweight, single-purpose tool for popularity and demand tracking.
 
-Use this tool when you only need the rank — e.g. 'Is this product selling well?' or daily rank monitoring. Lower rank number means higher sales velocity. If you also need price, rating or content, use get_product_detail instead (it includes BSR along with everything else). For historical rank trends, use get_sales_history. Costs 1 credit.`,
+Use this tool when you only need the rank, e.g. 'Is this product selling well?' or daily rank monitoring. Lower rank number means higher sales velocity. If you also need price, rating or content, use get_product_detail instead (it includes BSR along with everything else). For historical rank trends, use get_sales_history. Costs 1 credit.`,
     schema: z.object({
       asin: asinSchema,
       domain: domainSchema,
@@ -250,7 +250,7 @@ Use this tool when you only need the rank — e.g. 'Is this product selling well
     operation: "PACKAGE_DIMENSION",
     description: `Get a product's precise physical and logistical attributes: package height, width, length, weight, and its Amazon fee category (e.g. Computers, Apparel). This is the FBA fee-estimation and shipping-cost tool.
 
-Use this tool when the question is about shipping, storage, FBA fees, or warehouse planning. Do NOT use it for general product info — get_product_detail includes a human-readable dimensions string, but only THIS tool returns the structured fee category and exact measurements needed for fee calculation. Costs 1 credit.`,
+Use this tool when the question is about shipping, storage, FBA fees, or warehouse planning. Do NOT use it for general product info: get_product_detail includes a human-readable dimensions string, but only THIS tool returns the structured fee category and exact measurements needed for fee calculation. Costs 1 credit.`,
     schema: z.object({
       asin: asinSchema,
       domain: domainSchema,
@@ -351,7 +351,7 @@ Each page costs 1 credit. Start with one page and use sort_by (e.g. 'exact-aware
   {
     name: "get_seller_feedback",
     operation: "SELLER_FEEDBACK",
-    description: `Read individual buyer feedback entries for an Amazon seller: star ratings, comment text, and dates — filterable by rating range and time period. This is the reputation deep-dive tool.
+    description: `Read individual buyer feedback entries for an Amazon seller: star ratings, comment text, and dates, filterable by rating range and time period. This is the reputation deep-dive tool.
 
 Use this tool when the user wants to read actual buyer comments about a seller, analyze complaint patterns, or audit service quality. For aggregate reputation scores (30/90/365-day percentages) without individual comments, get_seller_profile is sufficient and cheaper in context.
 

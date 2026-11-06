@@ -60,7 +60,7 @@ export async function callEasyparser(
     });
   } catch (err) {
     throw new EasyparserApiError(
-      `Could not reach the Easyparser API: ${err instanceof Error ? err.message : String(err)}. This is a network-level issue — retry the call, and if it persists tell the user to check https://easyparser.com status.`,
+      `Could not reach the Easyparser API: ${err instanceof Error ? err.message : String(err)}. This is a network-level issue. Retry the call, and if it persists tell the user to check https://easyparser.com status.`,
     );
   }
 
