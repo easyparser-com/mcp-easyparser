@@ -232,7 +232,7 @@ Endpoints: `POST /mcp` (MCP), `GET /health` (health check).
 
 ## How it works
 
-This server is a thin, read-only adapter over the [Easyparser Real-Time API](https://easyparser.gitbook.io/easyparser-documentation). Tool descriptions are written for AI agents: each one states what it returns, when to use it, when a cheaper tool is better, and its credit cost. Every response includes `credits_remaining` so agents can make budget-aware decisions. Rate-limit and auth errors return actionable guidance (including the signup link) instead of raw HTTP codes.
+This server is a thin, read-only adapter over the [Easyparser Real-Time API](https://docs.easyparser.com/). Tool descriptions are written for AI agents: each one states what it returns, when to use it, when a cheaper tool is better, and its credit cost. Every response includes `credits_remaining` so agents can make budget-aware decisions. Rate-limit and auth errors return actionable guidance (including the signup link) instead of raw HTTP codes.
 
 ## License
 
