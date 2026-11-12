@@ -142,7 +142,7 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
   const server = new McpServer(
     {
       name: "easyparser-mcp",
-      version: "1.4.1",
+      version: "1.5.0",
     },
     {
       instructions: SERVER_INSTRUCTIONS,

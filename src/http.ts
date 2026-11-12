@@ -85,7 +85,7 @@ const httpServer = createServer(async (req: IncomingMessage, res: ServerResponse
 
   if (url.pathname === "/health") {
     res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ status: "ok", server: "easyparser-mcp", version: "1.4.1" }));
+    res.end(JSON.stringify({ status: "ok", server: "easyparser-mcp", version: "1.5.0" }));
     return;
   }
 
