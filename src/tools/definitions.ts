@@ -5,8 +5,11 @@
  */
 import { z } from "zod";
 import {
+  addressApiParams,
   asinSchema,
   currencySchema,
+  DELIVERY_ADDRESS_HINT,
+  deliveryAddressShape,
   domainSchema,
   languageSchema,
   minPageSchema,
@@ -40,7 +43,9 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
 
 Use this tool when you need a full product profile. If you only need competing seller prices, use get_product_offers instead (cheaper context). If you only need the sales rank, use get_bestseller_rank. If you only need shipping dimensions or the FBA fee category, use get_package_dimensions.
 
-${IDENTIFIER_MUTEX_HINT} Costs 1 credit; set a_plus_content to true only when the user explicitly asks about enhanced brand content, as it costs 1 extra credit.`,
+${IDENTIFIER_MUTEX_HINT} Costs 1 credit; set a_plus_content to true only when the user explicitly asks about enhanced brand content, as it costs 1 extra credit.
+
+${DELIVERY_ADDRESS_HINT}`,
     schema: z.object({
       asin: asinSchema.optional(),
       url: productUrlSchema.optional(),
@@ -59,6 +64,7 @@ ${IDENTIFIER_MUTEX_HINT} Costs 1 credit; set a_plus_content to true only when th
         .describe(
           "Fetch the product as offered by a specific seller (their Seller ID). Only use when the user asks about a specific merchant's offer.",
         ),
+      ...deliveryAddressShape,
     }),
     toApiParams: (i) => ({
       operation: "DETAIL",
@@ -69,6 +75,7 @@ ${IDENTIFIER_MUTEX_HINT} Costs 1 credit; set a_plus_content to true only when th
       currency: i.currency as string | undefined,
       a_plus_content: i.a_plus_content === true ? true : undefined,
       seller_id: i.seller_id as string | undefined,
+      ...addressApiParams(i),
     }),
   },
   {
@@ -78,7 +85,9 @@ ${IDENTIFIER_MUTEX_HINT} Costs 1 credit; set a_plus_content to true only when th
 
 Use this tool when the question is about WHO sells the product and at WHAT price. If you need the product's own details (title, images, rating), use get_product_detail instead.
 
-Each requested page costs 1 credit. Start with a single page (default) and only increase max_page if the user needs the full offer list. Use the condition and shipping filters to narrow results instead of paginating; it is cheaper.`,
+Each requested page costs 1 credit. Start with a single page (default) and only increase max_page if the user needs the full offer list. Use the condition and shipping filters to narrow results instead of paginating; it is cheaper.
+
+${DELIVERY_ADDRESS_HINT}`,
     schema: z.object({
       asin: asinSchema,
       domain: domainSchema,
@@ -92,6 +101,7 @@ Each requested page costs 1 credit. Start with a single page (default) and only 
         ),
       min_page: minPageSchema,
       max_page: pageSchema(5),
+      ...deliveryAddressShape,
     }),
     toApiParams: (i) => {
       const conditionMap: Record<string, string> = {
@@ -113,6 +123,7 @@ Each requested page costs 1 credit. Start with a single page (default) and only 
         free_shipping: i.free_shipping as boolean | undefined,
         min_page: i.min_page as number,
         max_page: i.max_page as number,
+        ...addressApiParams(i),
       };
       if (i.condition) params[conditionMap[i.condition as string]] = true;
       return params;
@@ -125,7 +136,9 @@ Each requested page costs 1 credit. Start with a single page (default) and only 
 
 Use this tool for market research, keyword analysis, and product discovery. If the user already has an ASIN or product URL, do NOT search; use get_product_detail directly.
 
-Each page costs 1 credit. One page typically returns 20-40 products, which is enough for most questions. Use sort_by and exclude_sponsored to improve result quality instead of fetching more pages. To filter by category or brand, first run one search and read the refinements field in the response to discover valid filter IDs, then pass them in refinements.`,
+Each page costs 1 credit. One page typically returns 20-40 products, which is enough for most questions. Use sort_by and exclude_sponsored to improve result quality instead of fetching more pages. To filter by category or brand, first run one search and read the refinements field in the response to discover valid filter IDs, then pass them in refinements.
+
+${DELIVERY_ADDRESS_HINT}`,
     schema: z.object({
       keyword: z
         .string()
@@ -163,6 +176,7 @@ Each page costs 1 credit. One page typically returns 20-40 products, which is en
       currency: currencySchema,
       min_page: minPageSchema,
       max_page: pageSchema(5),
+      ...deliveryAddressShape,
     }),
     toApiParams: (i) => ({
       operation: "SEARCH",
@@ -176,6 +190,7 @@ Each page costs 1 credit. One page typically returns 20-40 products, which is en
       currency: i.currency as string | undefined,
       min_page: i.min_page as number,
       max_page: i.max_page as number,
+      ...addressApiParams(i),
     }),
   },
   {
@@ -315,7 +330,9 @@ ${IDENTIFIER_MUTEX_HINT.replace("the identifier field", "seller_id")} You can di
 
 Use this tool for competitor inventory analysis, stock monitoring, and pricing-strategy research. If you need the seller's legal identity or reputation instead of their products, use get_seller_profile.
 
-Each page costs 1 credit. Start with one page and use sort_by (e.g. 'exact-aware-popularity-rank' for best sellers first) to surface the most relevant products early. ${IDENTIFIER_MUTEX_HINT.replace("the identifier field", "seller_id")}`,
+Each page costs 1 credit. Start with one page and use sort_by (e.g. 'exact-aware-popularity-rank' for best sellers first) to surface the most relevant products early. ${IDENTIFIER_MUTEX_HINT.replace("the identifier field", "seller_id")}
+
+${DELIVERY_ADDRESS_HINT}`,
     schema: z.object({
       seller_id: sellerIdSchema.optional(),
       url: sellerUrlSchema.optional(),
@@ -335,6 +352,7 @@ Each page costs 1 credit. Start with one page and use sort_by (e.g. 'exact-aware
       language: languageSchema,
       min_page: minPageSchema,
       max_page: pageSchema(5),
+      ...deliveryAddressShape,
     }),
     toApiParams: (i) => ({
       operation: "SELLER_PRODUCTS",
@@ -346,6 +364,7 @@ Each page costs 1 credit. Start with one page and use sort_by (e.g. 'exact-aware
       language: i.language as string | undefined,
       min_page: i.min_page as number,
       max_page: i.max_page as number,
+      ...addressApiParams(i),
     }),
   },
   {

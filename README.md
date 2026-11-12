@@ -83,6 +83,8 @@ Product details, seller offers, search results, 12-month sales history, Best Sel
 </tbody>
 </table>
 
+**Delivery address**: `get_product_detail`, `get_product_offers`, `search_products` and `get_seller_products` accept an optional delivery address, so prices, availability and delivery dates match a shopper at that location. Pass `zip_code` (plus `city`, `district` or `country_code` where the marketplace needs them), or the `address_id` of an address saved on the [Addresses page](https://app.easyparser.com/addresses). Inline fields need no setup; each new location counts once against your plan's address limit. The response's `applied_address` shows the address that was used. Per-marketplace formats: [Address Management](https://docs.easyparser.com/essentials/address-management).
+
 ## Get your API key
 
 Sign up at [app.easyparser.com/signup](https://app.easyparser.com/signup): free tier included, no credit card required. Copy your API key from [Account → Plan](https://app.easyparser.com/account/plan). Wherever a setup step below asks for `YOUR_API_KEY`, paste this key.
@@ -187,6 +189,10 @@ and what do their negative reviews say?
 ```
 Compare the top 10 organic results for "stainless steel water bottle" on
 amazon.de: prices, ratings, and which ones are Prime.
+```
+
+```
+What do the offers for B0CJB6V2L5 look like for a shopper in ZIP code 10001?
 ```
 
 ```

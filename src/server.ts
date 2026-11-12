@@ -23,6 +23,7 @@ import {
 } from "./tools/bulk.js";
 import { registerPrompts, registerResources } from "./prompts.js";
 import { TOOL_DEFINITIONS } from "./tools/definitions.js";
+import { validateDeliveryAddress } from "./schemas/common.js";
 import {
   buildOperationsCatalogResponse,
   CHECK_CREDITS_DESCRIPTION,
@@ -69,6 +70,12 @@ const dataEnvelopeOutputSchema = {
   credits_used: z.number().optional().describe("Credits charged for this request."),
   credits_remaining: z.number().optional().describe("Credits left on the account after this request."),
   request_id: z.string().optional().describe("Easyparser request ID, useful for support and error logs."),
+  applied_address: z
+    .record(z.unknown())
+    .optional()
+    .describe(
+      "Delivery address the request used (zipCode array, city, district, country_code). Without address fields this is the marketplace default.",
+    ),
 };
 
 /** Data Service / Account responses: pass the JSON object through as-is. */
@@ -169,6 +176,11 @@ export function createEasyparserServer(ctx: ServerContext): McpServer {
           if (def.name === "get_seller_profile" || def.name === "get_seller_products") {
             const err = validateMutex(input as Record<string, unknown>, "seller_id", "url");
             if (err) return errorResult(`Invalid input: ${err} Example: ${def.name}({ seller_id: "A1MCYUGJD2ILFU", domain: ".com" })`);
+          }
+
+          if ("zip_code" in def.schema.shape) {
+            const err = validateDeliveryAddress(input as Record<string, unknown>);
+            if (err) return errorResult(`Invalid input: ${err}`);
           }
 
           const apiKey = requireApiKey(ctx);

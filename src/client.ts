@@ -21,6 +21,8 @@ export interface EasyparserEnvelope {
   credits_used?: number;
   credits_remaining?: number;
   request_id?: string;
+  /** Delivery address Amazon was queried with (request_info.address). */
+  applied_address?: Record<string, unknown>;
 }
 
 export class EasyparserApiError extends Error {
@@ -105,7 +107,7 @@ export async function callEasyparser(
       ? errorDetails.map((e) => String((e as Record<string, unknown>)?.message ?? e)).join("; ")
       : "unknown error";
     throw new EasyparserApiError(
-      `Easyparser could not complete the ${params.operation} request: ${detail}. The identifier may be invalid, the product may be unavailable on amazon${params.domain}, or the page may require a delivery address. Suggest verifying the input or trying a different domain.`,
+      `Easyparser could not complete the ${params.operation} request: ${detail}. The identifier may be invalid, the product may be unavailable on amazon${params.domain}, or the page may require a delivery address. If you sent address fields, check that they fit the domain (an address_id must belong to the same domain). Suggest verifying the input or trying a different domain.`,
       response.status,
     );
   }
@@ -130,5 +132,9 @@ export async function callEasyparser(
         ? requestInfo.credits_remaining
         : undefined,
     request_id: typeof requestInfo.id === "string" ? requestInfo.id : undefined,
+    applied_address:
+      requestInfo.address !== null && typeof requestInfo.address === "object" && !Array.isArray(requestInfo.address)
+        ? (requestInfo.address as Record<string, unknown>)
+        : undefined,
   };
 }

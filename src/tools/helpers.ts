@@ -11,21 +11,21 @@ export const OPERATIONS_CATALOG = [
     operation: "DETAIL",
     tool: "get_product_detail",
     cost: "1 credit (+1 with a_plus_content)",
-    input: "asin OR url",
+    input: "asin OR url + optional delivery address (zip_code, city, district, country_code or address_id)",
     use_case: "Full product profile: title, price, images, rating, BSR, variants, reviews",
   },
   {
     operation: "OFFER",
     tool: "get_product_offers",
     cost: "1 credit per page (max 5 pages)",
-    input: "asin",
+    input: "asin + optional delivery address (zip_code, city, district, country_code or address_id)",
     use_case: "All seller offers for a product: prices, conditions, fulfillment, Buy Box",
   },
   {
     operation: "SEARCH",
     tool: "search_products",
     cost: "1 credit per page (max 5 pages)",
-    input: "keyword OR url",
+    input: "keyword OR url + optional delivery address (zip_code, city, district, country_code or address_id)",
     use_case: "Keyword/category product discovery with prices, ratings, badges",
   },
   {
@@ -74,7 +74,7 @@ export const OPERATIONS_CATALOG = [
     operation: "SELLER_PRODUCTS",
     tool: "get_seller_products",
     cost: "1 credit per page (max 5 pages)",
-    input: "seller_id OR url",
+    input: "seller_id OR url + optional delivery address (zip_code, city, district, country_code or address_id)",
     use_case: "A seller's full catalog: ASINs, prices, Prime status, ratings",
   },
   {
